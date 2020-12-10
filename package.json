@@ -1,0 +1,42 @@
+{
+  "name": "fastify-plugin-template",
+  "version": "0.0.0",
+  "description": "Plugin for fastify",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test",
+    "example": "fastify start example.js",
+    "lint": "standard",
+    "fix": "npm run lint -- --fix",
+    "validate": "npm run lint && npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/autotelic/fastify-plugin-template.git"
+  },
+  "keywords": [],
+  "author": "Autotelic Development Ltd <info@autotelic.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/autotelic/fastify-plugin-template/issues"
+  },
+  "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
+  "dependencies": {
+    "fastify-plugin": "^3.0.0"
+  },
+  "devDependencies": {
+    "tap": "^14.0.0",
+    "fastify": "^3.0.0",
+    "fastify-cli": "^2.5.1",
+    "standard": "^14.3.4",
+    "lint-staged": "^10.2.11"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "npm run fix"
+    ]
+  }
+}
