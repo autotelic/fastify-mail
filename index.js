@@ -8,10 +8,10 @@ module.exports = fastifyPlugin(async function (fastify, options) {
   await fastify.register(nodemailer, transporter)
 
   const mail = {
-    sendMail: (rew, reply, content) => {
+    sendMail: (req, reply, content) => {
       fastify.nodemailer.sendMail(content, (err, info) => {
         if (err) {
-          console.log(err)
+          fastify.log.error(err)
         }
         reply.send({
           messageId: info.messageId
