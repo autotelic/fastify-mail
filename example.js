@@ -2,6 +2,7 @@
 
 const mail = require('.')
 const mg = require('nodemailer-mailgun-transport')
+const nodemailer = require('fastify-nodemailer')
 
 module.exports = async function (fastify, options) {
   const auth = {
@@ -11,10 +12,8 @@ module.exports = async function (fastify, options) {
     }
   }
   const transporter = mg(auth)
-
-  await fastify.register(mail, {
-    transporter
-  })
+  fastify.register(nodemailer, transporter)
+  fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
     const content = {
