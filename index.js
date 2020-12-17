@@ -1,12 +1,7 @@
 'use strict'
-
-const nodemailer = require('fastify-nodemailer')
 const fastifyPlugin = require('fastify-plugin')
 
-module.exports = fastifyPlugin(async function (fastify, options) {
-  const { transporter } = options
-  await fastify.register(nodemailer, transporter)
-
+const fastifyMail = async (fastify) => {
   const mail = {
     sendMail: async (content) => {
       try {
@@ -19,4 +14,9 @@ module.exports = fastifyPlugin(async function (fastify, options) {
     }
   }
   fastify.decorate('mail', mail)
+}
+
+module.exports = fastifyPlugin(fastifyMail, {
+  name: 'fastify-mail',
+  dependencies: ['fastify-nodemailer']
 })
