@@ -20,7 +20,7 @@ module.exports = async function (fastify, options) {
     const content = {
       from: 'sender@example.com',
       to: '<recipient>',
-      subject: 'foo',
+      subject: 'test',
       text: 'test fastify-nodemailer and nodemailer-mailgun-transport'
     }
     fastify.mail.sendMail(req, reply, content)
