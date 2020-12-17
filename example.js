@@ -16,13 +16,14 @@ module.exports = async function (fastify, options) {
     transporter
   })
 
-  fastify.get('/sendmail', (req, reply) => {
+  fastify.get('/sendmail', async (req, reply) => {
     const content = {
       from: 'sender@example.com',
       to: '<recipient>',
       subject: 'test',
       text: 'test fastify-nodemailer and nodemailer-mailgun-transport'
     }
-    fastify.mail.sendMail(req, reply, content)
+    const message = await fastify.mail.sendMail(content)
+    message.sent ? reply.send(message.messageId) : reply.send(message.error)
   })
 }

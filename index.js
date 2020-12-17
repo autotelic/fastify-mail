@@ -8,15 +8,20 @@ module.exports = fastifyPlugin(async function (fastify, options) {
   await fastify.register(nodemailer, transporter)
 
   const mail = {
-    sendMail: (req, reply, content) => {
-      fastify.nodemailer.sendMail(content, (err, info) => {
-        if (err) {
-          fastify.log.error(err)
+    sendMail: async (content) => {
+      try {
+        const message = await fastify.nodemailer.sendMail(content)
+        const { messageId } = message
+        return {
+          sent: true,
+          messageId
         }
-        reply.send({
-          messageId: info.messageId
-        })
-      })
+      } catch (error) {
+        return {
+          sent: false,
+          error
+        }
+      }
     }
   }
   fastify.decorate('mail', mail)
