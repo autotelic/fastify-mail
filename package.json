@@ -26,7 +26,8 @@
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
     "fastify-nodemailer": "^5.0.0",
-    "fastify-plugin": "^3.0.0"
+    "fastify-plugin": "^3.0.0",
+    "nodemailer-mailgun-transport": "^2.0.2"
   },
   "devDependencies": {
     "tap": "^14.0.0",
