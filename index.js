@@ -1,4 +1,5 @@
 'use strict'
+
 const nodemailer = require('fastify-nodemailer')
 const fastifyPlugin = require('fastify-plugin')
 
@@ -7,8 +8,8 @@ module.exports = fastifyPlugin(async function (fastify, options) {
   await fastify.register(nodemailer, transporter)
 
   const mail = {
-    sendMail: (rew, reply, context) => {
-      fastify.nodemailer.sendMail(context, (err, info) => {
+    sendMail: (rew, reply, content) => {
+      fastify.nodemailer.sendMail(content, (err, info) => {
         if (err) {
           console.log(err)
         }

@@ -1,6 +1,5 @@
 'use strict'
 
-// const plugin = require('.')
 const mail = require('.')
 const mg = require('nodemailer-mailgun-transport')
 
@@ -17,7 +16,6 @@ module.exports = async function (fastify, options) {
     transporter
   })
 
-  console.log(fastify)
   fastify.get('/sendmail', (req, reply) => {
     const content = {
       from: 'sender@example.com',
