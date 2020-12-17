@@ -1,7 +1,7 @@
 'use strict'
 
 // const plugin = require('.')
-const nodemailer = require('fastify-nodemailer')
+const mail = require('.')
 const mg = require('nodemailer-mailgun-transport')
 
 module.exports = async function (fastify, options) {
@@ -12,26 +12,19 @@ module.exports = async function (fastify, options) {
     }
   }
   const transporter = mg(auth)
-  // fastify.register(plugin, { customOption: 'new', overloaded: 'see-example.js' })
-  await fastify.register(nodemailer, transporter)
 
+  await fastify.register(mail, {
+    transporter
+  })
+
+  console.log(fastify)
   fastify.get('/sendmail', (req, reply) => {
-    fastify.nodemailer.sendMail({
+    const content = {
       from: 'sender@example.com',
       to: 'm.zj.chan@gmail.com',
       subject: 'foo',
-      text: 'bar'
-    }, (err, info) => {
-      if (err) {
-        console.log(err)
-      }
-      reply.send({
-        messageId: info.messageId
-      })
-    })
-  })
-  fastify.post('/', (req, reply) => {
-    reply.type('application/json')
-    reply.send({ hello: 'world' })
+      text: 'test 3'
+    }
+    fastify.mail.sendMail(req, reply, content)
   })
 }
