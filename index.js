@@ -1,13 +1,22 @@
 'use strict'
-
+const nodemailer = require('fastify-nodemailer')
 const fastifyPlugin = require('fastify-plugin')
-const { plugin } = require('./lib')
 
-const DECORATOR = 'fastify-plugin-template'
+module.exports = fastifyPlugin(async function (fastify, options) {
+  const { transporter } = options
+  await fastify.register(nodemailer, transporter)
 
-module.exports = fastifyPlugin(function (fastify, options, next) {
-  fastify.addHook('onRequest', plugin(options))
-  next()
-}, {
-  name: DECORATOR
+  const mail = {
+    sendMail: (rew, reply, context) => {
+      fastify.nodemailer.sendMail(context, (err, info) => {
+        if (err) {
+          console.log(err)
+        }
+        reply.send({
+          messageId: info.messageId
+        })
+      })
+    }
+  }
+  fastify.decorate('mail', mail)
 })
