@@ -10,17 +10,11 @@ module.exports = fastifyPlugin(async function (fastify, options) {
   const mail = {
     sendMail: async (content) => {
       try {
-        const message = await fastify.nodemailer.sendMail(content)
-        const { messageId } = message
-        return {
-          sent: true,
-          messageId
-        }
+        const queued = await fastify.nodemailer.sendMail(content)
+        const { messageId } = queued
+        return { messageId }
       } catch (error) {
-        return {
-          sent: false,
-          error
-        }
+        return { error }
       }
     }
   }

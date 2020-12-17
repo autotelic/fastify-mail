@@ -23,7 +23,7 @@ module.exports = async function (fastify, options) {
       subject: 'test',
       text: 'test fastify-nodemailer and nodemailer-mailgun-transport'
     }
-    const message = await fastify.mail.sendMail(content)
-    message.sent ? reply.send(message.messageId) : reply.send(message.error)
+    const queued = await fastify.mail.sendMail(content)
+    queued.error ? reply.send(queued.error) : reply.send(queued)
   })
 }
