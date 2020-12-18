@@ -1,23 +1,7 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
-const pointOfView = require('point-of-view')
-const ejs = require('ejs')
-const resolve = require('path').resolve
 
-const fastifyMail = async (fastify, options) => {
-  const { templateOptions } = options
-  const povOpts = templateOptions || {
-    engine: {
-      ejs
-    },
-    includeViewExtension: true,
-    templates: 'templates',
-    options: {
-      filename: resolve('templates')
-    }
-  }
-  fastify.register(pointOfView, povOpts)
-
+const fastifyMail = async (fastify) => {
   const createMessage = async (recipients, template, context) => {
     const html = await fastify.view(template, context)
     return {
@@ -28,9 +12,10 @@ const fastifyMail = async (fastify, options) => {
     }
   }
   const mail = {
-    sendMail: async (recipients, templates, context) => {
+    sendMail: async (recipients, template, context) => {
       try {
-        const queued = await fastify.nodemailer.sendMail(await createMessage(recipients, templates, context))
+        const message = await createMessage(recipients, template, context)
+        const queued = await fastify.nodemailer.sendMail(message)
         const { messageId } = queued
         return { messageId }
       } catch (error) {
