@@ -28,9 +28,9 @@ module.exports = async function (fastify, options) {
     }
   }
 
-  await fastify.register(nodemailer, transporter)
-  await fastify.register(pointOfView, povOpts)
-  await fastify.register(mail)
+  fastify.register(nodemailer, transporter)
+  fastify.register(pointOfView, povOpts)
+  fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = [process.env.TEST_RECIPIENT]
