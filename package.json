@@ -31,11 +31,12 @@
     "point-of-view": "^4.7.0"
   },
   "devDependencies": {
-    "tap": "^14.0.0",
+    "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
+    "lint-staged": "^10.2.11",
     "standard": "^14.3.4",
-    "lint-staged": "^10.2.11"
+    "tap": "^14.0.0"
   },
   "lint-staged": {
     "*.{js,jsx}": [

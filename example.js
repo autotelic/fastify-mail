@@ -7,8 +7,8 @@ const nodemailer = require('fastify-nodemailer')
 module.exports = async function (fastify, options) {
   const auth = {
     auth: {
-      api_key: '<mailgun-api-key>',
-      domain: '<mailgun-domain>'
+      api_key: 'key-259f045b438f3b7661dfeada4b6ec578',
+      domain: 'sandbox917b292a33b549b58267c341b082b4d7.mailgun.org'
     }
   }
   const transporter = mg(auth)
@@ -16,13 +16,8 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const content = {
-      from: 'sender@example.com',
-      to: '<recipient>',
-      subject: 'test',
-      text: 'test fastify-nodemailer and nodemailer-mailgun-transport'
-    }
-    const queued = await fastify.mail.sendMail(content)
+    const recipients = ['recipient']
+    const queued = await fastify.mail.sendMail(recipients, 'test', { name: 'test' })
     queued.error ? reply.send(queued.error) : reply.send(queued)
   })
 }
