@@ -1,19 +1,28 @@
 'use strict'
 
-const plugin = require('.')
+const mail = require('.')
+const mg = require('nodemailer-mailgun-transport')
+const nodemailer = require('fastify-nodemailer')
 
-module.exports = function (fastify, options, next) {
-  fastify.register(plugin, { customOption: 'new', overloaded: 'see-example.js' })
+module.exports = async function (fastify, options) {
+  const auth = {
+    auth: {
+      api_key: '<mailgun-api-key>',
+      domain: '<mailgun-domain>'
+    }
+  }
+  const transporter = mg(auth)
+  fastify.register(nodemailer, transporter)
+  fastify.register(mail)
 
-  fastify.get('/', (req, reply) => {
-    reply.type('application/json')
-    reply.send({ foo: 'bar' })
+  fastify.get('/sendmail', async (req, reply) => {
+    const content = {
+      from: 'sender@example.com',
+      to: '<recipient>',
+      subject: 'test',
+      text: 'test fastify-nodemailer and nodemailer-mailgun-transport'
+    }
+    const queued = await fastify.mail.sendMail(content)
+    queued.error ? reply.send(queued.error) : reply.send(queued)
   })
-
-  fastify.post('/', (req, reply) => {
-    reply.type('application/json')
-    reply.send({ hello: 'world' })
-  })
-
-  next()
 }

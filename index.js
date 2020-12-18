@@ -1,13 +1,22 @@
 'use strict'
-
 const fastifyPlugin = require('fastify-plugin')
-const { plugin } = require('./lib')
 
-const DECORATOR = 'fastify-plugin-template'
+const fastifyMail = async (fastify) => {
+  const mail = {
+    sendMail: async (content) => {
+      try {
+        const queued = await fastify.nodemailer.sendMail(content)
+        const { messageId } = queued
+        return { messageId }
+      } catch (error) {
+        return { error }
+      }
+    }
+  }
+  fastify.decorate('mail', mail)
+}
 
-module.exports = fastifyPlugin(function (fastify, options, next) {
-  fastify.addHook('onRequest', plugin(options))
-  next()
-}, {
-  name: DECORATOR
+module.exports = fastifyPlugin(fastifyMail, {
+  name: 'fastify-mail',
+  dependencies: ['fastify-nodemailer']
 })
