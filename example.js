@@ -8,7 +8,7 @@ module.exports = async function (fastify, options) {
   const mgOpts = {
     auth: {
       api_key: process.env.MAILGUN_API_KEY,
-      domain: process.env.MAINGUN_DOMAIN
+      domain: process.env.MAILGUN_DOMAIN
     }
   }
   const transporter = mg(mgOpts)
