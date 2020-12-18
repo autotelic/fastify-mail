@@ -27,7 +27,8 @@
   "dependencies": {
     "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
-    "nodemailer-mailgun-transport": "^2.0.2"
+    "nodemailer-mailgun-transport": "^2.0.2",
+    "point-of-view": "^4.7.0"
   },
   "devDependencies": {
     "tap": "^14.0.0",
