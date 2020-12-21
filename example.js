@@ -17,7 +17,6 @@ module.exports = async function (fastify, options) {
   const transporter = mg(mgOpts)
 
   const povOpts = {
-    name: 'test',
     engine: {
       ejs
     },
