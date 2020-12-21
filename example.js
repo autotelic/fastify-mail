@@ -10,8 +10,8 @@ const resolve = require('path').resolve
 module.exports = async function (fastify, options) {
   const mgOpts = {
     auth: {
-      api_key: 'mailgun-api-key',
-      domain: 'mailgun-domain'
+      api_key: '<mailgun-api-key>',
+      domain: '<mailgun-domain>'
     }
   }
   const transporter = mg(mgOpts)
