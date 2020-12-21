@@ -34,6 +34,6 @@ const fastifyMail = async (fastify) => {
 
 module.exports = fastifyPlugin(fastifyMail, {
   name: 'fastify-mail',
-  // when 'point-of-view' plugin is updated with name, add to dependencies
+  // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name, we need to explicitly add it to the dependencies array here.
   dependencies: ['fastify-nodemailer']
 })
