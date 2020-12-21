@@ -25,9 +25,10 @@
   },
   "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
   "dependencies": {
+    "fastify-plugin": "^3.0.0"
+  },
+  "peerDependencies": {
     "fastify-nodemailer": "^5.0.0",
-    "fastify-plugin": "^3.0.0",
-    "nodemailer-mailgun-transport": "^2.0.2",
     "point-of-view": "^4.7.0"
   },
   "devDependencies": {
@@ -35,8 +36,8 @@
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
     "lint-staged": "^10.2.11",
-    "standard": "^14.3.4",
-    "tap": "^14.0.0"
+    "nodemailer-mailgun-transport": "^2.0.2",
+    "standard": "^14.3.4"
   },
   "lint-staged": {
     "*.{js,jsx}": [
