@@ -28,10 +28,11 @@
     "fastify-plugin": "^3.0.0"
   },
   "peerDependencies": {
-    "fastify-nodemailer": "^5.0.0"
+    "fastify-nodemailer": "^5.0.0",
+    "point-of-view": "^4.7.0"
   },
   "devDependencies": {
-    "tap": "^14.0.0",
+    "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
     "lint-staged": "^10.2.11",
