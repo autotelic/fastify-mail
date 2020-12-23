@@ -1,10 +1,11 @@
 const { test } = require('tap')
 const Fastify = require('fastify')
-const fastifyMail = require('../')
+const fastifyMail = require('.')
 const pointOfView = require('point-of-view')
 const nodemailer = require('fastify-nodemailer')
 const ejs = require('ejs')
 const { resolve } = require('path')
+const sinon = require('sinon')
 
 const testContext = { name: 'test-context' }
 
@@ -51,7 +52,61 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
   t.end()
 })
 
-test('fastify.mail.createMessage: ', t => {
+test('fastify.mail.sendMail', t => {
+  t.test('calls createMessage', t => {
+    t.plan(2)
+    const fastify = Fastify()
+
+    fastify.register(nodemailer)
+    fastify.register(pointOfView, {
+      engine: {
+        ejs
+      },
+      includeViewExtension: true,
+      options: {
+        filename: resolve('templates')
+      }
+    })
+    fastify.register(fastifyMail)
+    fastify.ready(async err => {
+      t.error(err)
+
+      fastify.mail.createMessage = sinon.spy()
+      await fastify.mail.sendMail(testContext)
+      t.error(sinon.assert.calledOnce(fastify.mail.createMessage))
+
+      fastify.close()
+    })
+  })
+  t.test('calls nodemailer.sendMail', t => {
+    t.plan(2)
+    const fastify = Fastify()
+
+    fastify.register(nodemailer)
+    fastify.register(pointOfView, {
+      engine: {
+        ejs
+      },
+      includeViewExtension: true,
+      options: {
+        filename: resolve('templates')
+      }
+    })
+    fastify.register(fastifyMail)
+    fastify.ready(async err => {
+      t.error(err)
+
+      fastify.nodemailer.sendMail = sinon.spy()
+      await fastify.mail.sendMail(testContext)
+      t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail))
+
+      fastify.close()
+    })
+  })
+  t.end()
+})
+
+test('fastify.mail.createMessage', t => {
   t.test('gets context dynamically', t => {
     t.plan(3)
     const fastify = Fastify()
@@ -70,9 +125,10 @@ test('fastify.mail.createMessage: ', t => {
 
     fastify.ready(async err => {
       t.error(err)
-      const queued = await fastify.mail.createMessage(testContext)
 
+      const queued = await fastify.mail.createMessage(testContext)
       t.ok(queued, 'message was created')
+
       const { html } = queued
       t.ok(html.includes(testContext.name), 'created html with context')
 
