@@ -27,7 +27,7 @@ test('mail decorator exists', t => {
 
 test('fastify-mail throws error if plugin dependencies not registered:', t => {
   t.test('point-of-view', t => {
-    t.plan(1)
+    t.plan(2)
     const fastify = Fastify()
 
     fastify.register(nodemailer)
@@ -35,11 +35,12 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
 
     fastify.ready(err => {
       t.ok(err instanceof Error)
+      t.is(err.message, "The dependency 'point-of-view' of plugin 'fastify-mail' is not registered")
     })
   })
 
   t.test('fastify-nodemailer', t => {
-    t.plan(1)
+    t.plan(2)
     const fastify = Fastify()
 
     fastify.register(pointOfView, { engine: { ejs } })
@@ -47,6 +48,7 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
 
     fastify.ready(err => {
       t.ok(err instanceof Error)
+      t.is(err.message, "The dependency 'fastify-nodemailer' of plugin 'fastify-mail' is not registered")
     })
   })
   t.end()
