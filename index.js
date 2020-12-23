@@ -4,7 +4,7 @@ const fastifyPlugin = require('fastify-plugin')
 const fastifyMail = async (fastify) => {
   // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
   if (!fastify.view) {
-    throw new Error('The dependency "point-of-view" of plugin "fastify-mail" is not registered')
+    throw new Error("The dependency 'point-of-view' of plugin 'fastify-mail' is not registered")
   }
 
   const mail = {
