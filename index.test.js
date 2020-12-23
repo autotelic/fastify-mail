@@ -9,7 +9,7 @@ const sinon = require('sinon')
 
 const testContext = { name: 'test-context' }
 
-test('fastify.mail exists', t => {
+test('mail decorator exists', t => {
   t.plan(2)
   const fastify = Fastify()
 
@@ -19,7 +19,7 @@ test('fastify.mail exists', t => {
 
   fastify.ready(err => {
     t.error(err)
-    t.ok(fastify.mail)
+    t.ok(fastify.hasDecorator('mail'))
 
     fastify.close()
   })
