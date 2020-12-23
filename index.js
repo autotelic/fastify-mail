@@ -2,25 +2,24 @@
 const fastifyPlugin = require('fastify-plugin')
 
 const fastifyMail = async (fastify) => {
-  // until 'point-of-view' plugin is updated with name, check if fastify.view namespace exists
+  // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
   if (!fastify.view) {
     throw new Error('The dependency "point-of-view" of plugin "fastify-mail" is not registered')
   }
 
-  const createMessage = async (context) => {
-    const html = await fastify.view('templates/index', context)
-    return {
-      from: 'sender@example.com',
-      to: ['<recipient>'],
-      subject: 'example',
-      html
-    }
-  }
-
   const mail = {
-    sendMail: async (context) => {
+    createMessage: async function (context) {
+      const html = await fastify.view('templates/index', context)
+      return {
+        from: 'sender@example.com',
+        to: ['<recipient>'],
+        subject: 'example',
+        html
+      }
+    },
+    sendMail: async function (context) {
       try {
-        const message = await createMessage(context)
+        const message = await this.createMessage(context)
         const queued = await fastify.nodemailer.sendMail(message)
         const { messageId } = queued
         return { messageId }
