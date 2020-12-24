@@ -39,6 +39,5 @@ module.exports = async function (fastify, options) {
       const { messageId } = queued
       reply.send({ messageId })
     }
-    // queued.error ? reply.send(queued.error) : reply.send({ message })
   })
 }
