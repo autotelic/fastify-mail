@@ -12,7 +12,7 @@ const fastifyMail = async (fastify) => {
       const html = await fastify.view('templates/index', context)
       return {
         from: 'sender@example.com',
-        to: ['<recipient>'],
+        to: ['m.zj.chan@gmail.com'],
         subject: 'example',
         html
       }
