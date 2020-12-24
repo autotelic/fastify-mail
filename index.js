@@ -21,8 +21,7 @@ const fastifyMail = async (fastify) => {
       try {
         const message = await this.createMessage(context)
         const queued = await fastify.nodemailer.sendMail(message)
-        const { messageId } = queued
-        return { messageId }
+        return queued
       } catch (error) {
         return { error }
       }
