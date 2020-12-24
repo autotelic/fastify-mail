@@ -54,117 +54,31 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
   t.end()
 })
 
-test('fastify.mail.sendMail', t => {
-  t.test('calls createMessage', t => {
-    t.plan(2)
-    const fastify = Fastify()
+test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t => {
+  t.plan(4)
+  const fastify = Fastify()
 
-    fastify.register(nodemailer)
-    fastify.register(pointOfView, {
-      engine: {
-        ejs
-      },
-      includeViewExtension: true,
-      options: {
-        filename: resolve('templates')
-      }
-    })
-    fastify.register(fastifyMail)
-    fastify.ready(async err => {
-      t.error(err)
-
-      fastify.mail.createMessage = sinon.spy()
-      await fastify.mail.sendMail(testContext)
-      t.error(sinon.assert.calledOnce(fastify.mail.createMessage))
-
-      fastify.close()
-    })
+  fastify.register(nodemailer)
+  fastify.register(pointOfView, {
+    engine: {
+      ejs
+    },
+    includeViewExtension: true,
+    options: {
+      filename: resolve('templates')
+    }
   })
-  t.test('calls nodemailer.sendMail', t => {
-    t.plan(2)
-    const fastify = Fastify()
+  fastify.register(fastifyMail)
+  fastify.ready(async err => {
+    t.error(err)
 
-    fastify.register(nodemailer)
-    fastify.register(pointOfView, {
-      engine: {
-        ejs
-      },
-      includeViewExtension: true,
-      options: {
-        filename: resolve('templates')
-      }
-    })
-    fastify.register(fastifyMail)
-    fastify.ready(async err => {
-      t.error(err)
+    fastify.nodemailer.sendMail = sinon.stub().returnsArg(0)
+    const queued = await fastify.mail.sendMail(testContext)
+    const { html } = queued
+    t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail), 'nodemailer.sendMail is called')
+    t.ok(html.includes(testContext.name), 'rendered html with context')
+    t.ok(html.includes('<header>'), 'rendered html with includes')
 
-      fastify.nodemailer.sendMail = sinon.spy()
-      await fastify.mail.sendMail(testContext)
-      t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail))
-
-      fastify.close()
-    })
+    fastify.close()
   })
-  t.end()
-})
-
-test('fastify.mail.createMessage', t => {
-  t.test('gets context dynamically', t => {
-    t.plan(3)
-    const fastify = Fastify()
-
-    fastify.register(nodemailer)
-    fastify.register(pointOfView, {
-      engine: {
-        ejs
-      },
-      includeViewExtension: true,
-      options: {
-        filename: resolve('templates')
-      }
-    })
-    fastify.register(fastifyMail)
-
-    fastify.ready(async err => {
-      t.error(err)
-
-      const queued = await fastify.mail.createMessage(testContext)
-      t.ok(queued, 'message was created')
-
-      const { html } = queued
-      t.ok(html.includes(testContext.name), 'created html with context')
-
-      fastify.close()
-    })
-  })
-
-  t.test('renders html with includes', t => {
-    t.plan(4)
-    const fastify = Fastify()
-
-    fastify.register(nodemailer)
-    fastify.register(pointOfView, {
-      engine: {
-        ejs
-      },
-      includeViewExtension: true,
-      options: {
-        filename: resolve('templates')
-      }
-    })
-    fastify.register(fastifyMail)
-
-    fastify.ready(async err => {
-      t.error(err)
-      const queued = await fastify.mail.createMessage(testContext)
-
-      t.ok(queued, 'message was created')
-      const { html } = queued
-      t.ok(html.includes('<header>'), 'created html includes header')
-      t.ok(html.includes('<footer>'), 'created html includes footer')
-
-      fastify.close()
-    })
-  })
-  t.end()
 })
