@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "description": "Plugin for fastify",
   "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "tap -R classic",
     "example": "fastify start example.js",
