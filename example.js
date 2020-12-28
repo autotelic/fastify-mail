@@ -33,7 +33,9 @@ module.exports = async function (fastify, options) {
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = ['test@example.com']
     const template = 'templates/index'
-    const queued = await fastify.mail.sendMail(recipients, template, { name: 'test' })
+    const context = { name: 'test' }
+
+    const queued = await fastify.mail.sendMail(recipients, template, context)
     if (queued.error) {
       const { error } = queued
       reply.send(error)
