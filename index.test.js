@@ -54,10 +54,10 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
 
 test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t => {
   const testContext = { name: 'test-context' }
-  const testRecipients = 'test@example.com'
+  const testRecipients = ['test@example.com']
   const testTemplate = 'templates/index-with-includes'
 
-  t.plan(4)
+  t.plan(5)
   const fastify = Fastify()
 
   fastify.register(nodemailer)
@@ -76,8 +76,9 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t
 
     fastify.nodemailer.sendMail = sinon.stub().returnsArg(0)
     const queued = await fastify.mail.sendMail(testRecipients, testTemplate, testContext)
-    const { html } = queued
+    const { html, to } = queued
     t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail), 'nodemailer.sendMail is called')
+    t.is(to, testRecipients)
     t.ok(html.includes(testContext.name), 'rendered html with context')
     t.ok(html.includes('<header>'), 'rendered html with includes')
 
