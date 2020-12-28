@@ -7,8 +7,6 @@ const ejs = require('ejs')
 const { resolve } = require('path')
 const sinon = require('sinon')
 
-const testContext = { name: 'test-context' }
-
 test('mail decorator exists', t => {
   t.plan(2)
   const fastify = Fastify()
@@ -55,6 +53,10 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
 })
 
 test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t => {
+  const testContext = { name: 'test-context' }
+  const testRecipients = 'test@example.com'
+  const testTemplate = 'templates/index-with-includes'
+
   t.plan(4)
   const fastify = Fastify()
 
@@ -73,7 +75,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t
     t.error(err)
 
     fastify.nodemailer.sendMail = sinon.stub().returnsArg(0)
-    const queued = await fastify.mail.sendMail(testContext)
+    const queued = await fastify.mail.sendMail(testRecipients, testTemplate, testContext)
     const { html } = queued
     t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail), 'nodemailer.sendMail is called')
     t.ok(html.includes(testContext.name), 'rendered html with context')
