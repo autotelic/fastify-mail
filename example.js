@@ -10,8 +10,8 @@ const resolve = require('path').resolve
 module.exports = async function (fastify, options) {
   const mgOpts = {
     auth: {
-      api_key: '<mailgun-api-key>',
-      domain: '<mailgun-domain>'
+      api_key: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN
     }
   }
   const transporter = mg(mgOpts)
@@ -31,11 +31,11 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['test@example.com']
-    const template = 'templates/index'
-    const context = { name: 'test' }
+    const recipients = ['m.zj.chan@gmail.com']
+    const templates = 'templates/test'
+    const context = { name: 'Test Name' }
 
-    const queued = await fastify.mail.sendMail(recipients, template, context)
+    const queued = await fastify.mail.sendMail(recipients, templates, context)
     if (queued.error) {
       const { error } = queued
       reply.send(error)

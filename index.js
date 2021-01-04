@@ -8,18 +8,20 @@ const fastifyMail = async (fastify) => {
   }
 
   const mail = {
-    createMessage: async function (recipients, template, context) {
-      const html = await fastify.view(template, context)
+    createMessage: async function (recipients, templates, context) {
+      const html = await fastify.view(templates + '/index', context)
+      const subject = await fastify.view(templates + '/subject', context)
+      const from = await fastify.view(templates + '/from')
       return {
-        from: 'sender@example.com',
         to: recipients,
-        subject: 'example',
+        from,
+        subject,
         html
       }
     },
-    sendMail: async function (recipients, template, context) {
+    sendMail: async function (recipients, templates, context) {
       try {
-        const message = await this.createMessage(recipients, template, context)
+        const message = await this.createMessage(recipients, templates, context)
         const queued = await fastify.nodemailer.sendMail(message)
         return queued
       } catch (error) {
