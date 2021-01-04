@@ -10,8 +10,8 @@ const resolve = require('path').resolve
 module.exports = async function (fastify, options) {
   const mgOpts = {
     auth: {
-      api_key: process.env.MAILGUN_API_KEY,
-      domain: process.env.MAILGUN_DOMAIN
+      api_key: '<mailgun-api-key>',
+      domain: '<mailgun-domain>'
     }
   }
   const transporter = mg(mgOpts)
@@ -31,7 +31,7 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['m.zj.chan@gmail.com']
+    const recipients = ['<recipient>']
     const templates = 'templates/test'
     const context = { name: 'Test Name' }
 
