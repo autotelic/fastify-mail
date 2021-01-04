@@ -9,9 +9,15 @@ const fastifyMail = async (fastify) => {
 
   const mail = {
     createMessage: async function (recipients, templates, context) {
-      const html = await fastify.view(templates + '/html', context)
-      const subject = await fastify.view(templates + '/subject', context)
-      const from = await fastify.view(templates + '/from')
+      const [
+        html,
+        subject,
+        from
+      ] = await Promise.all([
+        fastify.view(templates + '/html', context),
+        fastify.view(templates + '/subject', context),
+        fastify.view(templates + '/from')
+      ])
 
       return {
         to: recipients,
