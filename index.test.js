@@ -97,8 +97,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t
 
   fastify.ready(async err => {
     t.error(err)
-
-    fastify.nodemailer.sendMail = sinon.stub().returnsArg(0)
+    fastify.nodemailer.sendMail = sinon.stub()
     await fastify.mail.sendMail(testRecipients, relative('.', testTemplates), testContext)
     t.error(sinon.assert.calledOnceWithExactly(fastify.nodemailer.sendMail, testMessage))
 
