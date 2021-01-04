@@ -4,7 +4,7 @@ const fastifyMail = require('.')
 const pointOfView = require('point-of-view')
 const nodemailer = require('fastify-nodemailer')
 const ejs = require('ejs')
-const { resolve } = require('path')
+const { relative } = require('path')
 const sinon = require('sinon')
 
 test('mail decorator exists', t => {
@@ -53,12 +53,35 @@ test('fastify-mail throws error if plugin dependencies not registered:', t => {
 })
 
 test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t => {
-  const testContext = { name: 'test-context' }
-  const testRecipients = ['test@example.com']
-  const testTemplates = 'templates/test'
-
-  t.plan(7)
+  t.plan(2)
   const fastify = Fastify()
+
+  const testContext = { name: 'Test Name' }
+
+  const testRecipients = ['test@example.com']
+  const testSender = 'sender@example.com'
+  const testSubject = `${testContext.name}, Test Subject`
+  const testHtml =
+    '<!DOCTYPE html>\n' +
+    '<html lang="en">\n' +
+    '  <head></head>\n' +
+    '  <body>\n' +
+    '    <p>Name: test-context</p>\n' +
+    '  </body>\n' +
+    '</html>\n'
+
+  const testMessage = {
+    to: testRecipients,
+    from: testSender,
+    subject: testSubject,
+    html: testHtml
+  }
+
+  const testTemplates = t.testdir({
+    'html.ejs': t.fixture('file', testHtml),
+    'subject.ejs': t.fixture('file', testSubject),
+    'from.ejs': t.fixture('file', testSender)
+  })
 
   fastify.register(nodemailer)
   fastify.register(pointOfView, {
@@ -67,22 +90,17 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t
     },
     includeViewExtension: true,
     options: {
-      filename: resolve('templates')
+      filename: t.testdirName
     }
   })
   fastify.register(fastifyMail)
+
   fastify.ready(async err => {
     t.error(err)
 
     fastify.nodemailer.sendMail = sinon.stub().returnsArg(0)
-    const queued = await fastify.mail.sendMail(testRecipients, testTemplates, testContext)
-    const { html, to, from, subject } = queued
-    t.error(sinon.assert.calledOnce(fastify.nodemailer.sendMail), 'nodemailer.sendMail is called')
-    t.is(to, testRecipients)
-    t.is(from, 'sender@example.com')
-    t.is(subject, `Hello ${testContext.name}, This is a Test`)
-    t.ok(html.includes(testContext.name), 'rendered html with context')
-    t.ok(html.includes('<header>'), 'rendered html with includes')
+    await fastify.mail.sendMail(testRecipients, relative('.', testTemplates), testContext)
+    t.error(sinon.assert.calledOnceWithExactly(fastify.nodemailer.sendMail, testMessage))
 
     fastify.close()
   })
