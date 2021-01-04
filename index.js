@@ -8,7 +8,7 @@ const fastifyMail = async (fastify) => {
   }
 
   const mail = {
-    createMessage: async function (recipients, templates, context) {
+    createMessage: function (recipients, templates, context) {
       const htmlPromise = fastify.view(templates + '/html', context)
       const subjectPromise = fastify.view(templates + '/subject', context)
       const fromPromise = fastify.view(templates + '/from')
