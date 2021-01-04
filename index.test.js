@@ -88,10 +88,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t
     engine: {
       ejs
     },
-    includeViewExtension: true,
-    options: {
-      filename: t.testdirName
-    }
+    includeViewExtension: true
   })
   fastify.register(fastifyMail)
 
