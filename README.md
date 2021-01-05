@@ -27,7 +27,7 @@ const povConfig = {
 }
 
 const transport = {
-  // transport config / custom transport
+  // transport config
 }
 
 fastify.register(nodemailer, transport)
