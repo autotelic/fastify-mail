@@ -51,9 +51,9 @@ fastify.get("/sendmail", async (req, reply) => {
 
 #### Templates
 Each message must have the following templates with the file extension set in point-of-view config:
-  - `from` : contains email address the email is to be sent from.
-  - `subject` : contains the subject for the email.
-  - `html` : contains the html for the email.
+  - `from`: Contains email address the email is to be sent from.
+  - `subject`: Contains the subject for the email.
+  - `html`: Contains the html for the email.
 ```
 .
 |--index.js
@@ -84,10 +84,10 @@ This plugin decorates fastify with a `mail` object containing the following meth
     - `html`: `string` - The HTML of the email with context injected.
     - `subject`: `string` - The subject of the email with context injected.
 
-- `sendMail`: `function` - calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
+- `sendMail`: `function` - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
   - Accepts the following arguments: 
     - `recipients`: `array` - Array containing recipient[s] email address (`string`).
-    - `templates`: `string` - the relative path to the message's templates.
+    - `templates`: `string` - The relative path to the message's templates.
     - `context`: `object` - Object containing context for the message.
 
 ### Testing
