@@ -15,7 +15,7 @@ module.exports = async function (fastify, options) {
     }
   }
 
-  const transport = mg(mgConfig)
+  const transporter = mg(mgConfig)
 
   const povConfig = {
     engine: {
@@ -27,7 +27,7 @@ module.exports = async function (fastify, options) {
     }
   }
 
-  fastify.register(nodemailer, transport)
+  fastify.register(nodemailer, transporter)
   fastify.register(pointOfView, povConfig)
   fastify.register(mail)
 
