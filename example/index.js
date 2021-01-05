@@ -1,17 +1,17 @@
 'use strict'
 
-const mail = require('.')
+const mail = require('../')
 const mg = require('nodemailer-mailgun-transport')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
 const ejs = require('ejs')
-const resolve = require('path').resolve
+const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
   const mgOpts = {
     auth: {
-      api_key: '<mailgun-api-key>',
-      domain: '<mailgun-domain>'
+      api_key: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN
     }
   }
   const transporter = mg(mgOpts)
@@ -31,8 +31,8 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['<recipient>']
-    const templates = 'templates/example'
+    const recipients = ['<m.zj.chan@gmail.com>']
+    const templates = 'example/templates'
     const context = { name: 'Test Name' }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)
