@@ -16,18 +16,18 @@ const mail = require("@autotelic/fastify-mail")
 const nodemailer = require("fastify-nodemailer")
 const pointOfView = require("point-of-view")
 
-// register peer dependencies: fastify-nodemailer & point-of-view
+// register plugin dependencies: fastify-nodemailer & point-of-view
 
-const povOpts = {
+// point-of-view config must include a template engine and includeViewExtension: true
+const povConfig = {
   engine: {
     // template engine
   },
-  // includeViewExtension: true
-  // point-of-view options
-};
+  includeViewExtension: true
+}
 
-fastify.register(nodemailer, transporterOpts)
-fastify.register(pointOfView, povOpts)
+fastify.register(nodemailer, transporter)
+fastify.register(pointOfView, povConfig)
 
 // register fastify-mail
 fastify.register(mail)
@@ -35,7 +35,7 @@ fastify.register(mail)
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
   const recipients = ["test@example.com"]
-  const templates = "templates"
+  const templates = "path/to/my/templates"
   const context = { name: "Test Name" }
 
   const queued = await fastify.mail.sendMail(recipients, templates, context)
@@ -48,7 +48,7 @@ fastify.get("/sendmail", async (req, reply) => {
   }
 })
 ```
-The above example assumes the following file structure.
+The above example assumes the following file structure. Each template must have the file extension of the template engine set in point-of-view config.
 ```
 .
 |--index.js
