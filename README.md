@@ -78,3 +78,9 @@ To run the example app locally:
 
 - Send a GET request to `localhost:3000/sendmail.
 
+### Testing
+
+[Tap](https://node-tap.org/) is used for testing. To run tests:
+```
+$ npm test
+```
