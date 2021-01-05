@@ -26,7 +26,11 @@ const povConfig = {
   includeViewExtension: true
 }
 
-fastify.register(nodemailer, transporter)
+const transport = {
+  // transport config / custom transport
+}
+
+fastify.register(nodemailer, transport)
 fastify.register(pointOfView, povConfig)
 
 // register fastify-mail

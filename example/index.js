@@ -14,7 +14,8 @@ module.exports = async function (fastify, options) {
       domain: '<mailgun-domain>'
     }
   }
-  const transporter = mg(mgConfig)
+
+  const transport = mg(mgConfig)
 
   const povConfig = {
     engine: {
@@ -26,7 +27,7 @@ module.exports = async function (fastify, options) {
     }
   }
 
-  fastify.register(nodemailer, transporter)
+  fastify.register(nodemailer, transport)
   fastify.register(pointOfView, povConfig)
   fastify.register(mail)
 
