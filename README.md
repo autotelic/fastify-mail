@@ -48,14 +48,44 @@ fastify.get("/sendmail", async (req, reply) => {
   }
 })
 ```
-The above example assumes the following file structure. Each template must have the file extension of the template engine set in point-of-view config.
+
+#### Templates
+Each message must have the following templates with the file extension set in point-of-view config:
+  - `from` : contains email address the email is to be sent from.
+  - `subject` : contains the subject for the email.
+  - `html` : contains the html for the email.
 ```
 .
 |--index.js
 |--templates
-   |-- html.ejs
-   |-- subject.ejs
-   |-- from.ejs
+   |-- email
+      |-- html.ejs
+      |-- subject.ejs
+      |-- from.ejs
 ```
 
+#### Example App
 See [/example](./example) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
+
+### API
+
+#### Decorator
+
+This plugin decorates fastify with a `mail` object containing the following methods:
+
+- `createMessage`: `function` - Generates a message from templates with context injected. 
+  - Accepts the following arguments: 
+    - `recipients`: `array` - Array containing recipient[s] email address (`string`).
+    - `templates`: `string` - the relative path to the message's templates.
+    - `context`: `object` - Object containing context for the message.
+  - Returns: `object` with following properties:
+    - `to`: `array` - Array containing recipient[s] email address (`string`).
+    - `from`: `string` - The email address the email is to be sent from.
+    - `html`: `string` - The HTML of the email with context injected.
+    - `subject`: `string` - The subject of the email with context injected.
+
+- `sendMail`: `function` - calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
+  - Accepts the following arguments: 
+    - `recipients`: `array` - Array containing recipient[s] email address (`string`).
+    - `templates`: `string` - the relative path to the message's templates.
+    - `context`: `object` - Object containing context for the message.
