@@ -35,7 +35,7 @@ fastify.register(mail)
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
   const recipients = ["test@example.com"]
-  const templates = "path/to/my/templates"
+  const templates = "path/to/my/templates/"
   const context = { name: "Test Name" }
 
   const queued = await fastify.mail.sendMail(recipients, templates, context)
