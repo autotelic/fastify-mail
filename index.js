@@ -1,5 +1,6 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
+const path = require('path')
 
 const fastifyMail = async (fastify) => {
   // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
@@ -14,9 +15,9 @@ const fastifyMail = async (fastify) => {
         subject,
         from
       ] = await Promise.all([
-        fastify.view(templates + '/html', context),
-        fastify.view(templates + '/subject', context),
-        fastify.view(templates + '/from')
+        fastify.view(path.join(templates, 'html'), context),
+        fastify.view(path.join(templates, 'subject'), context),
+        fastify.view(path.join(templates, 'from'))
       ])
 
       return {
