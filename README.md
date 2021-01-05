@@ -17,11 +17,12 @@ const nodemailer = require("fastify-nodemailer")
 const pointOfView = require("point-of-view")
 
 // register peer dependencies: fastify-nodemailer & point-of-view
-const transporterOpts = {
-  // transporter options
-};
 
 const povOpts = {
+  engine: {
+    // template engine
+  },
+  // includeViewExtension: true
   // point-of-view options
 };
 

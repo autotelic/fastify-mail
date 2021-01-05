@@ -8,15 +8,15 @@ const ejs = require('ejs')
 const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
-  const mgOpts = {
+  const mgConfig = {
     auth: {
       api_key: '<mailgun-api-key>',
       domain: '<mailgun-domain>'
     }
   }
-  const transporter = mg(mgOpts)
+  const transporter = mg(mgConfig)
 
-  const povOpts = {
+  const povConfig = {
     engine: {
       ejs
     },
@@ -27,7 +27,7 @@ module.exports = async function (fastify, options) {
   }
 
   fastify.register(nodemailer, transporter)
-  fastify.register(pointOfView, povOpts)
+  fastify.register(pointOfView, povConfig)
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
