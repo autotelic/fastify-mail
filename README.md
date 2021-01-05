@@ -89,3 +89,10 @@ This plugin decorates fastify with a `mail` object containing the following meth
     - `recipients`: `array` - Array containing recipient[s] email address (`string`).
     - `templates`: `string` - the relative path to the message's templates.
     - `context`: `object` - Object containing context for the message.
+
+### Testing
+
+[Tap](https://node-tap.org/) is used for testing. To run tests:
+```
+$ npm test
+```
