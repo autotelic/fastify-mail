@@ -1,5 +1,6 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
+const { join } = require('path')
 
 const fastifyMail = async (fastify) => {
   // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
@@ -8,18 +9,27 @@ const fastifyMail = async (fastify) => {
   }
 
   const mail = {
-    createMessage: async function (context) {
-      const html = await fastify.view('templates/index', context)
+    createMessage: async function (recipients, templates, context) {
+      const [
+        html,
+        subject,
+        from
+      ] = await Promise.all([
+        fastify.view(join(templates, 'html'), context),
+        fastify.view(join(templates, 'subject'), context),
+        fastify.view(join(templates, 'from'))
+      ])
+
       return {
-        from: 'sender@example.com',
-        to: ['<recipient>'],
-        subject: 'example',
+        to: recipients,
+        from,
+        subject,
         html
       }
     },
-    sendMail: async function (context) {
+    sendMail: async function (recipients, templates, context) {
       try {
-        const message = await this.createMessage(context)
+        const message = await this.createMessage(recipients, templates, context)
         const queued = await fastify.nodemailer.sendMail(message)
         return queued
       } catch (error) {

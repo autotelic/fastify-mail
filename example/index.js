@@ -1,11 +1,11 @@
 'use strict'
 
-const mail = require('.')
+const mail = require('../')
 const mg = require('nodemailer-mailgun-transport')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
 const ejs = require('ejs')
-const resolve = require('path').resolve
+const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
   const mgOpts = {
@@ -31,7 +31,11 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const queued = await fastify.mail.sendMail({ name: 'test' })
+    const recipients = ['<recipient>']
+    const templates = 'example/templates'
+    const context = { name: 'Test Name' }
+
+    const queued = await fastify.mail.sendMail(recipients, templates, context)
     if (queued.error) {
       const { error } = queued
       reply.send(error)
