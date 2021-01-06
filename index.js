@@ -38,7 +38,7 @@ const fastifyMail = async (fastify) => {
       }
     }
   }
-  fastify.decorate('mail', mail)
+  fastify.decorate('mail', mail);
 }
 
 module.exports = fastifyPlugin(fastifyMail, {
