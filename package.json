@@ -1,7 +1,7 @@
 {
-  "name": "fastify-plugin-template",
+  "name": "@autotelic/fastify-mail",
   "version": "0.0.0",
-  "description": "Plugin for fastify",
+  "description": "A Fastify plugin for rendering and sending emails",
   "main": "index.js",
   "scripts": {
     "test": "tap -R classic",
