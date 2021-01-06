@@ -1,6 +1,7 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
+// TODO(matthew-charles-chan): remove comment after validate gh action test.
 
 const fastifyMail = async (fastify) => {
   // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
