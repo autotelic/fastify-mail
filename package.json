@@ -7,7 +7,7 @@
     "test": "tap -R classic",
     "example": "fastify start example/index.js -l info -w",
     "lint": "standard",
-    "fix": "npm run lint -- --fix",
+    "fix": "standard --fix",
     "validate": "npm run lint && npm run test"
   },
   "repository": {
@@ -32,17 +32,21 @@
     "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
+    "fastify-nodemailer": "^5.0.0",
+    "husky": "^4.3.6",
     "lint-staged": "^10.2.11",
     "nodemailer-mailgun-transport": "^2.0.2",
+    "point-of-view": "^4.7.0",
     "sinon": "^9.2.2",
     "standard": "^14.3.4",
-    "tap": "^14.11.0",
-    "point-of-view": "^4.7.0",
-    "fastify-nodemailer": "^5.0.0"
+    "tap": "^14.11.0"
   },
   "lint-staged": {
-    "*.{js,jsx}": [
-      "npm run fix"
-    ]
+    "*.js": "npm run fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged && npm test"
+    }
   }
 }
