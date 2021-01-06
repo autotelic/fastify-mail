@@ -42,7 +42,7 @@
     "tap": "^14.11.0"
   },
   "lint-staged": {
-    "*.js": "npm run test"
+    "*.js": "npm run fix"
   },
   "husky": {
     "hooks": {
