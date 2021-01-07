@@ -14,7 +14,16 @@
     "type": "git",
     "url": "git+https://github.com/autotelic/fastify-mail.git"
   },
-  "keywords": [],
+  "keywords": [
+    "fastify",
+    "plugin",
+    "nodemailer",
+    "fastify-nodemailer",
+    "mail",
+    "point-of-view",
+    "template",
+    "view"
+  ],
   "author": "Autotelic Development Ltd <info@autotelic.com>",
   "license": "MIT",
   "bugs": {
