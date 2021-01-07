@@ -3,11 +3,6 @@ const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
 
 const fastifyMail = async (fastify) => {
-  // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name and explicitly added to the dependencies array, remove the following if statement.
-  if (!fastify.view) {
-    throw new Error("The dependency 'point-of-view' of plugin 'fastify-mail' is not registered")
-  }
-
   const mail = {
     createMessage: async function (recipients, templates, context) {
       const [
@@ -42,6 +37,5 @@ const fastifyMail = async (fastify) => {
 
 module.exports = fastifyPlugin(fastifyMail, {
   name: 'fastify-mail',
-  // TODO(matthew-charles-chan): When the 'point-of-view' plugin is updated with the plugin name, we need to explicitly add it to the dependencies array here.
-  dependencies: ['fastify-nodemailer']
+  dependencies: ['fastify-nodemailer', 'point-of-view']
 })
