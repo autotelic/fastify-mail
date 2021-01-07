@@ -1,6 +1,6 @@
 {
   "name": "@autotelic/fastify-mail",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A Fastify plugin for rendering and sending emails",
   "main": "index.js",
   "scripts": {
