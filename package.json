@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/autotelic/fastify-plugin-template.git"
+    "url": "git+https://github.com/autotelic/fastify-mail.git"
   },
   "keywords": [],
   "author": "Autotelic Development Ltd <info@autotelic.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/autotelic/fastify-plugin-template/issues"
+    "url": "https://github.com/autotelic/fastify-mail/issues"
   },
-  "homepage": "https://github.com/autotelic/fastify-plugin-template#readme",
+  "homepage": "https://github.com/autotelic/fastify-mail#readme",
   "dependencies": {
     "fastify-plugin": "^3.0.0"
   },
