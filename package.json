@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "tap -R classic",
-    "example": "fastify start example/index.js -l info -w",
+    "example-mg": "fastify start examples/example-mailgun/index.js -l info -w",
+    "example-ms": "fastify start examples/example-mailslurper/index.js -l info -w",
     "lint": "standard",
     "fix": "standard --fix",
     "validate": "npm run lint && npm run test"

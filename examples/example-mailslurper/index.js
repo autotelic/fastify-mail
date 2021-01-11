@@ -1,28 +1,18 @@
 'use strict'
 
-const mail = require('../')
-// const mg = require('nodemailer-mailgun-transport')
+const mail = require('../..')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
 const ejs = require('ejs')
 const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
-  // const mgConfig = {
-  //   auth: {
-  //     api_key: '<mailgun-api-key>',
-  //     domain: '<mailgun-domain>'
-  //   }
-  // }
-
-  // const transporter = mg(mgConfig)
-
   const mailSlurpConfig = {
     host: 'localhost',
-    port: 2600, // smtp port in MailSlurp config.json
+    port: 2500, // smtp port in MailSlurper config.json
     auth: {
-      user: 'Chantal', // from MailSlurp setup
-      pass: 'meowmeow' // from MailSlurp setup
+      user: 'username', // from MailSlurper credentials setup
+      pass: 'password' // from MailSlurper credentials setup
     }
   }
 
@@ -41,8 +31,8 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['<recipient>']
-    const templates = 'example/templates'
+    const recipients = ['recipient@example.com']
+    const templates = 'examples/example-mailslurper/templates'
     const context = { name: 'Test Name' }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)
