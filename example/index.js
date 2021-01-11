@@ -1,21 +1,30 @@
 'use strict'
 
 const mail = require('../')
-const mg = require('nodemailer-mailgun-transport')
+// const mg = require('nodemailer-mailgun-transport')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
 const ejs = require('ejs')
 const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
-  const mgConfig = {
+  // const mgConfig = {
+  //   auth: {
+  //     api_key: '<mailgun-api-key>',
+  //     domain: '<mailgun-domain>'
+  //   }
+  // }
+
+  // const transporter = mg(mgConfig)
+
+  const mailSlurpConfig = {
+    host: 'localhost',
+    port: 2600, // smtp port in MailSlurp config.json
     auth: {
-      api_key: '<mailgun-api-key>',
-      domain: '<mailgun-domain>'
+      user: 'Chantal', // from MailSlurp setup
+      pass: 'meowmeow' // from MailSlurp setup
     }
   }
-
-  const transporter = mg(mgConfig)
 
   const povConfig = {
     engine: {
@@ -27,7 +36,7 @@ module.exports = async function (fastify, options) {
     }
   }
 
-  fastify.register(nodemailer, transporter)
+  fastify.register(nodemailer, mailSlurpConfig)
   fastify.register(pointOfView, povConfig)
   fastify.register(mail)
 
