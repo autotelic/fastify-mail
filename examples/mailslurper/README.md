@@ -23,7 +23,7 @@
 ## Running the Example:
 - In the fastify-mail directory, run:
   ```sh
-  npm run example-ms
+  fastify start examples/mailslurper/index.js -l info -w
   ```
 
 - Send a GET request to `localhost:3000/sendmail`.

@@ -12,7 +12,7 @@
 - Run the example.
 
   ```sh
-  npm run example
+  fastify start examples/mailgun/index.js -l info -w
   ```
 
 - Send a GET request to `localhost:3000/sendmail.
