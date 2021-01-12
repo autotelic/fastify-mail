@@ -14,15 +14,15 @@
   - `recipients`
 
 ### Running the Example:
-- In the MailSlurper director, run:
+- In the MailSlurper directory, run:
   ```sh
   ./mailslurper
   ```
-- In the directory containing fastify-mail, run:
+- In the fastify-mail directory, run:
   ```sh
   npm run example-ms
   ```
 
 - Send a GET request to `localhost:3000/sendmail`.
 - Open your browser to `localhost:8080` or whichever `wwwPort` was set in `config.json` for MailSlurper
-- You should see the test email appear!
+- You should see the test email appear in the browser MailSlurper!
