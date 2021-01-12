@@ -31,7 +31,7 @@ module.exports = async function (fastify, options) {
   fastify.register(mail)
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['recipient@example.com']
+    const recipients = ['<recipient>']
     const templates = 'examples/example-mailslurper/templates'
     const context = { name: 'Test Name' }
 
