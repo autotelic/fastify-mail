@@ -32,7 +32,7 @@ module.exports = async function (fastify, options) {
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = ['<recipient>']
-    const templates = 'examples/example-mailslurper/templates'
+    const templates = 'examples/templates'
     const context = { name: 'Test Name' }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)
