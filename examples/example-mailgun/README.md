@@ -6,7 +6,7 @@
   npm i
   ```
 
-- Update `example/index.js` with:
+- Update `examples/example-mailgun/index.js` with:
   - [mailgun](https://www.mailgun.com/) API key and domain
   - `recipients`
 - Run the example.
