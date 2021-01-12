@@ -69,7 +69,9 @@ Each message must have the following templates with the file extension set in po
 ```
 
 #### Example App
-See [/example](./example) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
+See [/examples/example-mailgun](./examples/example-mailgun) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
+
+See [/examples/example-mailslurper](./examples/example-mailslurper) for a working example app using [MailSlurper](https://mailslurper.com/)
 
 ### API
 
