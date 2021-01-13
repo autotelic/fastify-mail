@@ -3,6 +3,7 @@
 - Install dependencies.
 
   ```sh
+  cd examples/mailgun
   npm i
   ```
 
@@ -12,7 +13,7 @@
 - Run the example.
 
   ```sh
-  fastify start examples/mailgun/index.js -l info -w
+  npm start
   ```
 
 - Send a GET request to `localhost:3000/sendmail.
