@@ -2,6 +2,8 @@
 const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
 
+console.log('this is a test to ensure husky is working')
+
 const fastifyMail = async (fastify) => {
   const mail = {
     createMessage: async function (recipients, templates, context) {
