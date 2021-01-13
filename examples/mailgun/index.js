@@ -16,7 +16,7 @@ module.exports = async function (fastify, options) {
   }
 
   const transporter = mg(mgConfig)
-  console.log('does the linter pick this up too?')
+
   const povConfig = {
     engine: {
       ejs
