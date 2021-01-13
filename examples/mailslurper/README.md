@@ -12,6 +12,7 @@
 - Install dependencies.
 
   ```sh
+  cd examples/mailslurper
   npm i
   ```
 - Update `examples/example-mailslurper/index.js` with:
@@ -23,7 +24,7 @@
 ## Running the Example:
 - In the fastify-mail directory, run:
   ```sh
-  fastify start examples/mailslurper/index.js -l info -w
+  npm start
   ```
 
 - Send a GET request to `localhost:3000/sendmail`.
