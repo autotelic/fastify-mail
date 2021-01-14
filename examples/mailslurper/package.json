@@ -1,34 +1,16 @@
 {
-  "name": "@autotelic/fastify-mail",
-  "version": "0.1.0",
+  "name": "fastify-mailslurper-example",
   "description": "An example for a Fastify plugin for rendering and sending emails, using MailSlurper",
   "main": "index.js",
   "scripts": {
     "start": "fastify start index.js -l info -w"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/autotelic/fastify-mail.git"
-  },
-  "keywords": [],
-  "author": "Autotelic Development Ltd <info@autotelic.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/autotelic/fastify-mail/issues"
-  },
-  "homepage": "https://github.com/autotelic/fastify-mail/examples/mailslurper/#readme",
   "dependencies": {
-    "fastify-plugin": "^3.0.0"
-  },
-  "peerDependencies": {
-    "fastify-nodemailer": "^5.0.0",
-    "point-of-view": "^4.8.0"
-  },
-  "devDependencies": {
     "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
     "fastify-nodemailer": "^5.0.0",
+    "fastify-plugin": "^3.0.0",
     "point-of-view": "^4.7.0"
   }
 }
