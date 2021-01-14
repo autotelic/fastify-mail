@@ -1,0 +1,16 @@
+{
+  "name": "fastify-mailslurper-example",
+  "description": "An example for a Fastify plugin for rendering and sending emails, using MailSlurper",
+  "main": "index.js",
+  "scripts": {
+    "start": "fastify start index.js -l info -w"
+  },
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "fastify": "^3.0.0",
+    "fastify-cli": "^2.5.1",
+    "fastify-nodemailer": "^5.0.0",
+    "fastify-plugin": "^3.0.0",
+    "point-of-view": "^4.7.0"
+  }
+}

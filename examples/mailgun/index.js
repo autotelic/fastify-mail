@@ -1,6 +1,6 @@
 'use strict'
 
-const mail = require('../')
+const mail = require('../../')
 const mg = require('nodemailer-mailgun-transport')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
@@ -33,7 +33,7 @@ module.exports = async function (fastify, options) {
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = ['<recipient>']
-    const templates = 'example/templates'
+    const templates = '../templates'
     const context = { name: 'Test Name' }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)

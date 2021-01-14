@@ -68,8 +68,10 @@ Each message must have the following templates with the file extension set in po
       |-- from.ejs
 ```
 
-#### Example App
-See [/example](./example) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
+#### Example Apps
+See [/examples/mailgun](./examples/mailgun) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
+
+See [/examples/mailslurper](./examples/mailslurper) for a working example app using [MailSlurper](https://mailslurper.com/)
 
 ### API
 

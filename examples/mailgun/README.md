@@ -3,16 +3,17 @@
 - Install dependencies.
 
   ```sh
+  cd examples/mailgun
   npm i
   ```
 
-- Update `example/index.js` with:
+- Update `examples/mailgun/index.js` with:
   - [mailgun](https://www.mailgun.com/) API key and domain
   - `recipients`
 - Run the example.
 
   ```sh
-  npm run example
+  npm start
   ```
 
 - Send a GET request to `localhost:3000/sendmail.
