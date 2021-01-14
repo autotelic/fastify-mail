@@ -15,7 +15,7 @@
   cd examples/mailslurper
   npm i
   ```
-- Update `examples/example-mailslurper/index.js` with:
+- Update `examples/mailslurper/index.js` with:
   - `port`: the smtp port in the [MailSlurper `config.json` file](https://github.com/mailslurper/mailslurper/wiki/Getting-Started#step-2---configuration). Default is `2500`.
   - `user`: the username made in the createcredentials executable.
   - `pass`: the password created for that username in the createcredentials executable.
