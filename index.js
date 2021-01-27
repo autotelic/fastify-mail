@@ -12,7 +12,7 @@ const fastifyMail = async (fastify) => {
       ] = await Promise.all([
         fastify.view(join(templates, 'html'), context),
         fastify.view(join(templates, 'subject'), context),
-        fastify.view(join(templates, 'from'))
+        fastify.view(join(templates, 'from'), context)
       ])
 
       return {
