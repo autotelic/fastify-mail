@@ -1,14 +1,14 @@
 'use strict'
 
 const fastifyMail = require('../../')
-const ejs = require('ejs')
+const nunjucks = require('nunjucks')
 
 module.exports = async function (fastify, options) {
-  fastify.register(fastifyMail, { engine: { ejs } })
+  fastify.register(fastifyMail, { engine: { nunjucks } })
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = [process.env.RECIPIENTS]
-    const templates = '../templates'
+    const templates = './templates'
     const context = { name: 'Test Name', sender: process.env.SENDER }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)

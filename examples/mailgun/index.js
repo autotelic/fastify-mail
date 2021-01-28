@@ -1,10 +1,10 @@
 'use strict'
 
 const fastifyMail = require('../..')
-const ejs = require('ejs')
+const nunjucks = require('nunjucks')
 
 module.exports = async function (fastify, options) {
-  fastify.register(fastifyMail, { engine: { ejs }, transporter: 'mailgun' })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: 'mailgun' })
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = [process.env.RECIPIENTS]
