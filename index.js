@@ -1,10 +1,9 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
-const { join } = require('path')
 const nodemailer = require('fastify-nodemailer')
-const { resolve } = require('path')
+const pointOfView = require('point-of-view')
+const { resolve, join } = require('path')
 const { maildev, mailgun } = require('./transporters')
-const { pointOfView } = require('point-of-view')
 
 const fastifyMail = async (fastify, opts) => {
   // nodemailer transporter configurations:
