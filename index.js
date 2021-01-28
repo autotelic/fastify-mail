@@ -2,7 +2,7 @@
 const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
 const nodemailer = require('fastify-nodemailer')
-const { maildev } = require('./transporters')
+const { maildev, mailgun } = require('./transporters')
 
 const fastifyMail = async (fastify) => {
   const mail = {
@@ -33,11 +33,12 @@ const fastifyMail = async (fastify) => {
         return { error }
       }
     },
-    registerTransporter: function ({ transporter = maildev }) {
+    registerTransporter: function (transporter = maildev) {
       transporter(fastify, nodemailer)
-    }
+    },
+    mailgun
   }
-  mail.registerTransporter(fastify, nodemailer)
+  mail.registerTransporter()
   fastify.decorate('mail', mail)
 }
 
