@@ -1,0 +1,5 @@
+export MAILGUN_API_KEY=1234
+export MAILGUN_DOMAIN=sandbox...mailgun.org
+
+export RECIPIENT=example@email.com
+export SENDER=example@email.com
