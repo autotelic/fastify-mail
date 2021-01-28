@@ -36,6 +36,7 @@ const fastifyMail = async (fastify, opts) => {
   }
   fastify.register(pointOfView, povConfig)
 
+  // decorator configurations:
   const mail = {
     createMessage: async function (recipients, templates, context) {
       const [
@@ -65,7 +66,6 @@ const fastifyMail = async (fastify, opts) => {
       }
     }
   }
-
   fastify.decorate('mail', mail)
 }
 
