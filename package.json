@@ -37,7 +37,6 @@
     "point-of-view": "^4.8.0"
   },
   "devDependencies": {
-    "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
     "fastify-nodemailer": "^5.0.0",
