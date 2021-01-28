@@ -1,23 +1,10 @@
 'use strict'
 
-const mail = require('../../')
-const pointOfView = require('point-of-view')
+const fastifyMail = require('../../')
 const ejs = require('ejs')
-const { resolve } = require('path')
 
 module.exports = async function (fastify, options) {
-  const povConfig = {
-    engine: {
-      ejs
-    },
-    includeViewExtension: true,
-    options: {
-      filename: resolve('templates')
-    }
-  }
-
-  fastify.register(pointOfView, povConfig)
-  fastify.register(mail)
+  fastify.register(fastifyMail, { engine: { ejs } })
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = ['test@example.com']

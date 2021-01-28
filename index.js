@@ -2,9 +2,25 @@
 const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
 const nodemailer = require('fastify-nodemailer')
+const { resolve } = require('path')
 const { maildev, mailgun } = require('./transporters')
+const { pointOfView } = require('point-of-view')
 
-const fastifyMail = async (fastify) => {
+const fastifyMail = async (fastify, opts) => {
+  if (!opts.engine) {
+    return await new Error('Missing engine object')
+  }
+  const engineType = opts.engine
+  const povConfig = {
+    engine: engineType,
+    includeViewExtension: true,
+    options: {
+      filename: resolve('templates')
+    }
+  }
+
+  fastify.register(pointOfView, povConfig)
+
   const mail = {
     createMessage: async function (recipients, templates, context) {
       const [
@@ -43,6 +59,5 @@ const fastifyMail = async (fastify) => {
 }
 
 module.exports = fastifyPlugin(fastifyMail, {
-  name: 'fastify-mail',
-  dependencies: ['point-of-view']
+  name: 'fastify-mail'
 })
