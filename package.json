@@ -4,7 +4,6 @@
   "description": "A Fastify plugin for rendering and sending emails",
   "main": "index.js",
   "scripts": {
-    "test": "tap -R classic",
     "lint": "standard",
     "fix": "standard --fix",
     "validate": "npm run lint && npm run test"
@@ -30,7 +29,8 @@
   },
   "homepage": "https://github.com/autotelic/fastify-mail#readme",
   "dependencies": {
-    "fastify-plugin": "^3.0.0"
+    "fastify-plugin": "^3.0.0",
+    "maildev": "^1.1.0"
   },
   "peerDependencies": {
     "fastify-nodemailer": "^5.0.0",
