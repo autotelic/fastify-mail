@@ -1,1 +1,3 @@
 export SMTP_PORT=2500
+export RECIPIENTS=test@email.com
+export SENDER=test@email.com
