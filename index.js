@@ -1,6 +1,8 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
 const { join } = require('path')
+const nodemailer = require('fastify-nodemailer')
+const { maildev } = require('./transporters')
 
 const fastifyMail = async (fastify) => {
   const mail = {
@@ -30,12 +32,16 @@ const fastifyMail = async (fastify) => {
       } catch (error) {
         return { error }
       }
+    },
+    registerTransporter: function ({ transporter = maildev }) {
+      transporter(fastify, nodemailer)
     }
   }
+  mail.registerTransporter(fastify, nodemailer)
   fastify.decorate('mail', mail)
 }
 
 module.exports = fastifyPlugin(fastifyMail, {
   name: 'fastify-mail',
-  dependencies: ['fastify-nodemailer', 'point-of-view']
+  dependencies: ['point-of-view']
 })
