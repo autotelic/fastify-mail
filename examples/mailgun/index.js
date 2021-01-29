@@ -2,9 +2,10 @@
 
 const fastifyMail = require('../..')
 const nunjucks = require('nunjucks')
+const { mailgun } = require('../../transporters')
 
 module.exports = async function (fastify, options) {
-  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: 'mailgun' })
+  await fastify.register(fastifyMail, { engine: { nunjucks }, transporter: mailgun })
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = [process.env.RECIPIENTS]
