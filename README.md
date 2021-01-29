@@ -13,28 +13,10 @@ npm i @autotelic/fastify-mail
 ```js
 // index.js
 const mail = require("@autotelic/fastify-mail")
-const nodemailer = require("fastify-nodemailer")
-const pointOfView = require("point-of-view")
-
-// register plugin dependencies: fastify-nodemailer & point-of-view
-
-// point-of-view config must include a template engine and includeViewExtension: true
-const povConfig = {
-  engine: {
-    // template engine
-  },
-  includeViewExtension: true
-}
-
-const transporterConfig = {
-  // transporter config
-}
-
-fastify.register(nodemailer, transporterConfig)
-fastify.register(pointOfView, povConfig)
 
 // register fastify-mail
-fastify.register(mail)
+// A template engine MUST be installed and declared. Transporter defaults to MailDev if nothing is declared.
+fastify.register(mail, {engine: { TEMPLATE_ENGINE_PREFERENCE }, transporter: { NODEMAILER_TRANSPORTER_PREFERENCE } })
 
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
@@ -71,7 +53,7 @@ Each message must have the following templates with the file extension set in po
 #### Example Apps
 See [/examples/mailgun](./examples/mailgun) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
 
-See [/examples/mailslurper](./examples/mailslurper) for a working example app using [MailSlurper](https://mailslurper.com/)
+See [/examples/maildev](./examples/maildev) for a working example app using [MailDev](https://maildev.github.io/maildev/)
 
 ### API
 
