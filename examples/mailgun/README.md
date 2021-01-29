@@ -1,19 +1,30 @@
-### To run the example app locally:
+# Fastify-Mail Plugin with mailgun Example
 
-- Install dependencies.
+### Setup:
+
+- Fork and clone [fastify-mail repo](https://github.com/autotelic/fastify-mail).
+- Install dependencies: `npm i`
+- change directory to `examples/mailgun` and install dependencies:
 
   ```sh
   cd examples/mailgun
   npm i
   ```
 
-- Update `examples/mailgun/index.js` with:
-  - [mailgun](https://www.mailgun.com/) API key and domain
-  - `recipients`
+- Signup or login to [mailgun](https://www.mailgun.com/)
+  - From the side navigation bar, click on `Sending` - you should see a `sandbox` testing domain.
+  - Add your email to _Authorized Recipients_.
+  - Click on `sandbox` domain and then click on `API`.
+  - Make note of both your domain and API key.
+- If you haven't already, install [direnv](https://direnv.net/docs/installation.html).
+- Copy env example: `cp .envrc.example .envrc`
+- Update variables with information collected from mailgun and save.
+- Unblock .envrc by running command `direnv allow`
 - Run the example.
 
   ```sh
   npm start
   ```
 
-- Send a GET request to `localhost:3000/sendmail.
+- Send a GET request to `localhost:3000/sendmail`.
+- Open the email inbox you listed as an authorized recipient to view test email.
