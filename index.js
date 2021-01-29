@@ -3,28 +3,18 @@ const fastifyPlugin = require('fastify-plugin')
 const nodemailer = require('fastify-nodemailer')
 const pointOfView = require('point-of-view')
 const { resolve, join } = require('path')
-const { maildev, mailgun } = require('./transporters')
+const { maildev } = require('./transporters')
 
-const fastifyMail = async (fastify, opts) => {
+const fastifyMail = async (fastify, opts = { transporter: maildev }) => {
   // nodemailer transporter configurations:
-  const transporterOption = opts.transporter
-  const registerTransporter = function (transporter = maildev) {
+  const { transporter } = opts
+  if (typeof transporterOption === 'function') {
     transporter(fastify, nodemailer)
-  }
-  if (transporterOption === 'mailgun') {
-    registerTransporter(mailgun)
-  } else if (typeof transporterOption === 'function') {
-    registerTransporter(transporterOption)
-  } else if (typeof transporterOption === 'object') {
-    fastify.register(nodemailer, transporterOption)
-  } else if (!transporterOption || transporterOption === 'maildev') {
-    registerTransporter()
+  } else {
+    fastify.register(nodemailer, transporter)
   }
 
   // point-of-view configurations:
-  if (!opts.engine) {
-    return await new Error('Missing engine object')
-  }
   const engineType = opts.engine
   const povConfig = {
     engine: engineType,
