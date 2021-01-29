@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "standard",
     "fix": "standard --fix",
+    "test": "tap -R classic",
     "validate": "npm run lint && npm run test"
   },
   "repository": {
@@ -28,21 +29,16 @@
     "url": "https://github.com/autotelic/fastify-mail/issues"
   },
   "homepage": "https://github.com/autotelic/fastify-mail#readme",
-  "dependencies": {
-    "fastify-plugin": "^3.0.0",
-    "maildev": "^1.1.0"
-  },
-  "peerDependencies": {
-    "fastify-nodemailer": "^5.0.0",
-    "point-of-view": "^4.8.0"
-  },
   "devDependencies": {
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
     "fastify-nodemailer": "^5.0.0",
+    "fastify-plugin": "^3.0.0",
     "husky": "^4.3.6",
     "lint-staged": "^10.2.11",
+    "maildev": "^1.1.0",
     "nodemailer-mailgun-transport": "^2.0.2",
+    "nunjucks": "^3.2.2",
     "point-of-view": "^4.7.0",
     "sinon": "^9.2.2",
     "standard": "^14.3.4",
