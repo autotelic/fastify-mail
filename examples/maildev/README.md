@@ -10,11 +10,7 @@
   cd examples/maildev
   npm i
   ```
-
-- If you haven't already, install [direnv](https://direnv.net/docs/installation.html).
-- Copy env example: `cp .envrc.example .envrc`
-- _Optional:_ Update variables to preferred port and test email addresses.
-- Unblock .envrc by running command `direnv allow`
+- _Optional:_ If you'd like to set a custom smtp port, create `.env` containing `SMTP_PORT=<prefrred port>`
 - Run the example.
 
   ```sh

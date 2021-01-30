@@ -16,10 +16,8 @@
   - Add your email to _Authorized Recipients_.
   - Click on `sandbox` domain and then click on `API`.
   - Make note of both your domain and API key.
-- If you haven't already, install [direnv](https://direnv.net/docs/installation.html).
-- Copy env example: `cp .envrc.example .envrc`
-- Update variables with information collected from mailgun and save.
-- Unblock .envrc by running command `direnv allow`
+- Copy env example: `cp .env.example .env`
+- Update variables with information collected from mailgun.
 - Run the example.
 
   ```sh
