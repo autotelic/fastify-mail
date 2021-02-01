@@ -8,7 +8,7 @@ const { maildev } = require('./transporters')
 const fastifyMail = async (fastify, opts = { transporter: maildev }) => {
   // nodemailer transporter configurations:
   const { transporter } = opts
-  if (typeof transporterOption === 'function') {
+  if (typeof transporter === 'function') {
     transporter(fastify, nodemailer)
   } else {
     fastify.register(nodemailer, transporter)
