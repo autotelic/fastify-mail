@@ -1,25 +1,15 @@
 const { test } = require('tap')
 const Fastify = require('fastify')
 const fastifyMail = require('.')
+const nodemailer = require('fastify-nodemailer')
 const nunjucks = require('nunjucks')
 const { relative } = require('path')
 const sinon = require('sinon')
 
-const testTransporterObj = {
-  jsonTransport: true
-}
-
-const testTransporterFn = (fastify, nodemailer) => {
-  const transporter = {
-    jsonTransport: true
-  }
-  fastify.register(nodemailer, transporter)
-}
-
 test('mail, nodemailer & view decorators exist', async t => {
   const fastify = Fastify()
 
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterObj })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: { jsonTransport: true } })
 
   await fastify.ready()
   t.ok(fastify.hasDecorator('mail'))
@@ -40,18 +30,17 @@ test('nodemailer registers with transporter default maildev', async t => {
 })
 
 test('nodemailer registers a transporter when passed a function', async t => {
+  const spy = sinon.spy()
   const fastify = Fastify()
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterFn })
-  await fastify.ready()
-  t.ok(fastify.nodemailer)
-  fastify.close()
+  await fastify.register(fastifyMail, { engine: { nunjucks }, transporter: spy })
+  t.ok(spy.calledWith(fastify, nodemailer))
 })
 
 test('register callback throws an error if the engine is missing', t => {
   t.plan(2)
   const fastify = Fastify()
 
-  fastify.register(fastifyMail, { engine: null, testTransporterObj })
+  fastify.register(fastifyMail, { engine: null, transporter: { jsonTransport: true } })
 
   fastify.ready(err => {
     t.ok(err instanceof Error)
@@ -63,7 +52,7 @@ test('register callback throws an error if the engine is missing', t => {
 test('fastify.mail.createMessage exist', async t => {
   const fastify = Fastify()
 
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterObj })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: { jsonTransport: true } })
 
   await fastify.ready()
   t.ok(fastify.mail.createMessage)
@@ -73,7 +62,7 @@ test('fastify.mail.createMessage exist', async t => {
 test('fastify.mail.sendMail exist', async t => {
   const fastify = Fastify()
 
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterObj })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: { jsonTransport: true } })
 
   await fastify.ready()
   t.ok(fastify.mail.sendMail)
@@ -110,7 +99,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', a
     'from.njk': t.fixture('file', testSender)
   })
 
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterObj })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: { jsonTransport: true } })
 
   await fastify.ready()
   fastify.nodemailer.sendMail = sinon.stub()
@@ -122,7 +111,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', a
 test('fastify.mail.sendMail returns an error with missing arguments', async t => {
   const fastify = Fastify()
 
-  fastify.register(fastifyMail, { engine: { nunjucks }, testTransporterObj })
+  fastify.register(fastifyMail, { engine: { nunjucks }, transporter: { jsonTransport: true } })
 
   await fastify.ready()
   await fastify.mail.sendMail()
