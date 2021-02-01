@@ -15,9 +15,9 @@ const fastifyMail = async (fastify, opts = { transporter: maildev }) => {
   }
 
   // point-of-view configurations:
-  const engineType = opts.engine
+  const { engine } = opts
   const povConfig = {
-    engine: engineType,
+    engine,
     includeViewExtension: true,
     options: {
       filename: resolve('templates')
