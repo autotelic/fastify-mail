@@ -58,7 +58,7 @@ profile*
 *flamegraph*
 
 # environment
-.envrc
+.env
 
 # package-lock
 package-lock.json
