@@ -5,9 +5,8 @@ const pointOfView = require('point-of-view')
 const { resolve, join } = require('path')
 const { maildev } = require('./transporters')
 
-const fastifyMail = async (fastify, opts = { transporter: maildev }) => {
+const fastifyMail = async (fastify, { engine, transporter = maildev }) => {
   // nodemailer transporter configurations:
-  const { transporter } = opts
   if (typeof transporter === 'function') {
     transporter(fastify, nodemailer)
   } else {
@@ -15,7 +14,6 @@ const fastifyMail = async (fastify, opts = { transporter: maildev }) => {
   }
 
   // point-of-view configurations:
-  const { engine } = opts
   const povConfig = {
     engine,
     includeViewExtension: true,
