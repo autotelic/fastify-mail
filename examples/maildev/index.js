@@ -9,7 +9,7 @@ const transporter = {
 }
 
 module.exports = async function (fastify, options) {
-  fastify.register(fastifyMail, { engine: { nunjucks }, transporter })
+  fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter })
 
   fastify.get('/sendmail', async (req, reply) => {
     const recipients = ['test@example.com']
