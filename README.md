@@ -18,10 +18,14 @@ npm i @autotelic/fastify-mail
 - For quick start, `fastify-mail` only requires the engine. For example, using `nunjucks`:
 
   ```js
-  fastify.register(mail, {engine: { nunjucks: require('nunjucks') }, transporter: ... })
+  fastify.register(mail, { pov: { engine: { nunjucks: require('nunjucks') } }, transporter: ... })
   ```
 
 - If more options are needed, omitting the `engine` option will not register `point-of-view` with `fastify-mail`, and you can register this plugin standalone. 
+- If you configure `point-of-view` with a different decorator name, add this to the options of `fastify-mail`
+  ```js
+  fastify.register(mail, { pov: { propertyName: 'POV_DECORATOR' }, transporter: ... })
+  ```
 
 ##### Nodemailer
 - `transporter` should be an object defining connection data to be used as a `nodemailer` SMTP transport. [View nodemailer's docs here](https://nodemailer.com/smtp/)
@@ -34,7 +38,7 @@ npm i @autotelic/fastify-mail
     ignoreTLS: true
   }
 
-  fastify.register(mail, {engine: ..., transporter })
+  fastify.register(mail, { pov: { engine: ... }, transporter })
   ```
 
 ### Example
@@ -44,7 +48,7 @@ npm i @autotelic/fastify-mail
 const mail = require("@autotelic/fastify-mail")
 
 // register fastify-mail
-fastify.register(mail, {engine: { TEMPLATE_ENGINE_OBJECT }, transporter: { NODEMAILER_TRANSPORTER_OBJECT } })
+fastify.register(mail, pov: { {engine: { TEMPLATE_ENGINE_OBJECT } }, transporter: { NODEMAILER_TRANSPORTER_OBJECT } })
 
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
@@ -73,9 +77,9 @@ Each message must have the following templates with the file extension set in po
 |--index.js
 |--templates
    |-- email
-      |-- html.ejs
-      |-- subject.ejs
-      |-- from.ejs
+      |-- html.njk
+      |-- subject.njk
+      |-- from.njk
 ```
 
 #### Example Apps
