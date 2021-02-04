@@ -30,11 +30,8 @@
   },
   "homepage": "https://github.com/autotelic/fastify-mail#readme",
   "dependencies": {
-    "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
-    "maildev": "^1.1.0",
     "nodemailer": "^6.4.17",
-    "nodemailer-mailgun-transport": "^2.0.2",
     "nunjucks": "^3.2.2",
     "point-of-view": "^4.7.0"
   },
