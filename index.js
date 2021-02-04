@@ -1,29 +1,27 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
-const nodemailer = require('fastify-nodemailer')
+const { createTransport } = require('nodemailer')
 const pointOfView = require('point-of-view')
 const { resolve, join } = require('path')
-const { maildev } = require('./transporters')
 
-const fastifyMail = async (fastify, { engine, transporter = maildev }) => {
-  // nodemailer transporter configurations:
-  if (typeof transporter === 'function') {
-    transporter(fastify, nodemailer)
-  } else {
-    fastify.register(nodemailer, transporter)
-  }
+const fastifyMail = async (fastify, opts) => {
+  const { engine, transporter } = opts
+
+  // nodemailer configurations:
+  fastify.decorate('nodemailer', createTransport(transporter))
+  fastify.addHook('onClose', async () => {
+    fastify.nodemailer.close()
+  })
 
   // point-of-view configurations:
   const povConfig = {
     engine,
     includeViewExtension: true,
-    options: {
-      filename: resolve('templates')
-    }
+    options: { filename: resolve('templates') }
   }
   fastify.register(pointOfView, povConfig)
 
-  // decorator configurations:
+  // mail decorator configurations:
   const mail = {
     createMessage: async function (recipients, templates, context) {
       const [
