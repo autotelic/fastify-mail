@@ -8,6 +8,7 @@
   "dependencies": {
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
+    "nodemailer-mailgun-transport": "^2.0.2",
     "nunjucks": "^3.2.2"
   }
 }

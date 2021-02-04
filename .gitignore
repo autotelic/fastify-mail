@@ -59,6 +59,7 @@ profile*
 
 # environment
 .env
+.envrc
 
 # package-lock
 package-lock.json
