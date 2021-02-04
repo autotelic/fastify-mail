@@ -22,11 +22,17 @@ test('register callback throws an error if an invalid transporter is given', asy
   await t.rejects(fastify.ready(), Error('Cannot create property \'mailer\' on string \'error\''))
 })
 
-test('register callback throws an error if the engine is missing', async (t) => {
+test('register callback throws an error if the engine is invalid', async (t) => {
   t.teardown(() => fastify.close())
   const fastify = Fastify()
-  fastify.register(fastifyMail, { engine: null, transporter: { jsonTransport: true } })
-  await t.rejects(fastify.ready(), Error('Missing engine'))
+  fastify.register(fastifyMail, { engine: 'error', transporter: { jsonTransport: true } })
+  await t.rejects(fastify.ready(), Error('\'0\' not yet supported, PR? :)'))
+})
+test('view decorator does not exist if the engine is not provided', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  await fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
+  t.notOk(fastify.hasDecorator('view'))
 })
 
 test('fastify.mail.createMessage exist', async t => {

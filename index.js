@@ -14,12 +14,14 @@ const fastifyMail = async (fastify, opts) => {
   })
 
   // point-of-view configurations:
-  const povConfig = {
-    engine,
-    includeViewExtension: true,
-    options: { filename: resolve('templates') }
+  if (engine) {
+    const povConfig = {
+      engine,
+      includeViewExtension: true,
+      options: { filename: resolve('templates') }
+    }
+    fastify.register(pointOfView, povConfig)
   }
-  fastify.register(pointOfView, povConfig)
 
   // mail decorator configurations:
   const mail = {
