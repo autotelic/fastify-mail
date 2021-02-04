@@ -4,14 +4,20 @@
 
 - Fork and clone [fastify-mail repo](https://github.com/autotelic/fastify-mail).
 - Install dependencies: `npm i`
-- change directory to `examples/maildev` and install dependencies:
+- Change directory to `examples/maildev` and install dependencies:
 
   ```sh
   cd examples/maildev
   npm i
   ```
-- _Optional:_ If you'd like to set a custom smtp port, create `.env` containing `SMTP_PORT=<prefrred port>`
-- Run the example.
+
+- Run a new docker container to get mailDev running:
+
+  ```sh
+  docker run -p 1080:80 -p 1025:25 --name maildev maildev/maildev
+  ```
+
+- Open a new terminal and run fastify-mail example:
 
   ```sh
   npm start
