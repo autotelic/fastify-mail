@@ -15,6 +15,24 @@ test('mail, nodemailer & view decorators exist', async t => {
   t.ok(fastify.hasDecorator('view'))
 })
 
+test('point-of-view can register standalone and be used with fastify-mail', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(require('point-of-view'), { propertyName: 'foo', engine: { nunjucks } })
+  fastify.after(() => {
+    fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
+  })
+  await fastify.ready()
+  t.ok(fastify.hasDecorator('foo'))
+})
+
+test('view decorator does not exist if the engine is not provided', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
+  t.notOk(fastify.hasDecorator('view'))
+})
+
 test('register callback throws an error if the engine is invalid', async (t) => {
   t.teardown(() => fastify.close())
   const fastify = Fastify()
@@ -25,25 +43,8 @@ test('register callback throws an error if the engine is invalid', async (t) => 
 test('register callback throws an error if point-of-view is not registered', async (t) => {
   t.teardown(() => fastify.close())
   const fastify = Fastify()
-  fastify.register(require('point-of-view'), { engine: { nunjucks } })
-  fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
-  await fastify.ready()
-  console.log(fastify)
-  t.ok(fastify.hasDecorator('view'))
-})
-
-test('register callback throws an error if point-of-view is not registered', async (t) => {
-  t.teardown(() => fastify.close())
-  const fastify = Fastify()
   fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
   await t.rejects(fastify.ready(), Error('fastify-mail requires a view decorator.'))
-})
-
-test('view decorator does not exist if the engine is not provided', async (t) => {
-  t.teardown(() => fastify.close())
-  const fastify = Fastify()
-  fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
-  t.notOk(fastify.hasDecorator('view'))
 })
 
 test('register callback throws an error if an invalid transporter is given', async (t) => {
