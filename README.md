@@ -8,6 +8,35 @@ A [Fastify](https://www.fastify.io/) plugin that uses [point-of-view](https://gi
 npm i @autotelic/fastify-mail
 ```
 
+### Setup
+
+`fastify-mail` decorates the reply interface with the `mail` method and takes two options to get started: `engine` and `transporter`
+
+##### Point-of-View
+- `engine` should be a template engine object used to configure point-of-view
+- to see a list of engines currently supported by point-of-view, [visit the docs here](https://github.com/fastify/point-of-view)
+- For quick start, `fastify-mail` only requires the engine. For example, using `nunjucks`:
+
+  ```js
+  fastify.register(mail, {engine: { nunjucks: require('nunjucks') }, transporter: ... })
+  ```
+
+- If more options are needed, omitting the `engine` option will not register `point-of-view` with `fastify-mail`, and you can register this plugin standalone. 
+
+##### Nodemailer
+- `transporter` should be an object defining connection data to be used as a `nodemailer` SMTP transport. [View nodemailer's docs here](https://nodemailer.com/smtp/)
+- `fastify-mail` decorates `fastify` with `nodemailer` so a transporter must be defined
+- For example, using `maildev`:
+  ```js
+  const transporter = {
+    host: 'localhost',
+    port: 1025,
+    ignoreTLS: true
+  }
+
+  fastify.register(mail, {engine: ..., transporter })
+  ```
+
 ### Example
 
 ```js
@@ -15,8 +44,7 @@ npm i @autotelic/fastify-mail
 const mail = require("@autotelic/fastify-mail")
 
 // register fastify-mail
-// A template engine MUST be installed and declared. Transporter defaults to MailDev if nothing is declared.
-fastify.register(mail, {engine: { TEMPLATE_ENGINE_PREFERENCE }, transporter: { NODEMAILER_TRANSPORTER_PREFERENCE } })
+fastify.register(mail, {engine: { TEMPLATE_ENGINE_OBJECT }, transporter: { NODEMAILER_TRANSPORTER_OBJECT } })
 
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
