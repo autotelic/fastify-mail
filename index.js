@@ -1,27 +1,34 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
-const { createTransport } = require('nodemailer')
 const pointOfView = require('point-of-view')
+const { createTransport } = require('nodemailer')
 const { resolve, join } = require('path')
 
 const fastifyMail = async (fastify, opts) => {
-  const { engine, transporter } = opts
+  const { pov = {}, transporter } = opts
+
+  //  point-of-view configurations:
+  const { engine, propertyName = 'view' } = pov
+  if (engine) {
+    const config = {
+      ...pov,
+      includeViewExtension: true,
+      options: { filename: resolve('templates') }
+    }
+    fastify.register(pointOfView, config)
+  } else {
+    fastify.addHook('onReady', async () => {
+      if (!fastify.hasDecorator(propertyName)) {
+        throw Error(`fastify-mail requires a ${propertyName} decorator.`)
+      }
+    })
+  }
 
   // nodemailer configurations:
   fastify.decorate('nodemailer', createTransport(transporter))
   fastify.addHook('onClose', async () => {
     fastify.nodemailer.close()
   })
-
-  // point-of-view configurations:
-  if (engine) {
-    const povConfig = {
-      engine,
-      includeViewExtension: true,
-      options: { filename: resolve('templates') }
-    }
-    fastify.register(pointOfView, povConfig)
-  }
 
   // mail decorator configurations:
   const mail = {
