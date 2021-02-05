@@ -10,18 +10,18 @@ npm i @autotelic/fastify-mail
 
 ### Setup
 
-`fastify-mail` decorates the reply interface with the `mail` method and takes two options to get started: `engine` and `transporter`
+`fastify-mail` decorates the reply interface with the `mail` method and takes two options to get started: `pov` and `transporter`
 
 ##### Point-of-View
-- `engine` should be a template engine object used to configure point-of-view
-- to see a list of engines currently supported by point-of-view, [visit the docs here](https://github.com/fastify/point-of-view)
+- `pov.engine` should be a template engine object used to configure point-of-view
+- to see a list of engines currently supported by point-of-view with options, [view docs here](https://github.com/fastify/point-of-view/blob/master/index.d.ts)
 - For quick start, `fastify-mail` only requires the engine. For example, using `nunjucks`:
 
   ```js
   fastify.register(mail, { pov: { engine: { nunjucks: require('nunjucks') } }, transporter: ... })
   ```
 
-- If more options are needed, omitting the `engine` option will not register `point-of-view` with `fastify-mail`, and you can register this plugin standalone. 
+- If you'd prefer to register `point-of-view` on your own, omit the `engine` option and `fastify-mail` will not register it.
 - If you configure `point-of-view` with a different decorator name, add this to the options of `fastify-mail`
   ```js
   fastify.register(mail, { pov: { propertyName: 'POV_DECORATOR' }, transporter: ... })
