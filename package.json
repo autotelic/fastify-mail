@@ -4,9 +4,9 @@
   "description": "A Fastify plugin for rendering and sending emails",
   "main": "index.js",
   "scripts": {
-    "test": "tap -R classic",
     "lint": "standard",
     "fix": "standard --fix",
+    "test": "tap -R classic",
     "validate": "npm run lint && npm run test"
   },
   "repository": {
@@ -30,21 +30,16 @@
   },
   "homepage": "https://github.com/autotelic/fastify-mail#readme",
   "dependencies": {
-    "fastify-plugin": "^3.0.0"
-  },
-  "peerDependencies": {
-    "fastify-nodemailer": "^5.0.0",
-    "point-of-view": "^4.8.0"
+    "fastify-plugin": "^3.0.0",
+    "nodemailer": "^6.4.17",
+    "nunjucks": "^3.2.2",
+    "point-of-view": "^4.7.0"
   },
   "devDependencies": {
-    "ejs": "^3.1.5",
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
-    "fastify-nodemailer": "^5.0.0",
     "husky": "^4.3.6",
     "lint-staged": "^10.2.11",
-    "nodemailer-mailgun-transport": "^2.0.2",
-    "point-of-view": "^4.7.0",
     "sinon": "^9.2.2",
     "standard": "^14.3.4",
     "tap": "^14.11.0"

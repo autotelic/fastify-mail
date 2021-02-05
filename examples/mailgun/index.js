@@ -1,40 +1,24 @@
 'use strict'
-
-const mail = require('../../')
+const fastifyMail = require('../..')
 const mg = require('nodemailer-mailgun-transport')
-const nodemailer = require('fastify-nodemailer')
-const pointOfView = require('point-of-view')
-const ejs = require('ejs')
-const { resolve } = require('path')
+const nunjucks = require('nunjucks')
 
 module.exports = async function (fastify, options) {
   const mgConfig = {
     auth: {
-      api_key: '<mailgun-api-key>',
-      domain: '<mailgun-domain>'
+      apiKey: process.env.MAILGUN_API_KEY,
+      domain: process.env.MAILGUN_DOMAIN
     }
   }
 
   const transporter = mg(mgConfig)
 
-  const povConfig = {
-    engine: {
-      ejs
-    },
-    includeViewExtension: true,
-    options: {
-      filename: resolve('templates')
-    }
-  }
-
-  fastify.register(nodemailer, transporter)
-  fastify.register(pointOfView, povConfig)
-  fastify.register(mail)
+  await fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter })
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = ['<recipient>']
-    const templates = '../templates'
-    const context = { name: 'Test Name' }
+    const recipients = [process.env.RECIPIENTS]
+    const templates = './templates'
+    const context = { name: 'Test Name', sender: process.env.SENDER }
 
     const queued = await fastify.mail.sendMail(recipients, templates, context)
     if (queued.error) {

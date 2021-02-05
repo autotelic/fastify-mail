@@ -1,103 +1,127 @@
 const { test } = require('tap')
 const Fastify = require('fastify')
 const fastifyMail = require('.')
-const pointOfView = require('point-of-view')
-const nodemailer = require('fastify-nodemailer')
-const ejs = require('ejs')
-const { relative } = require('path')
+const nunjucks = require('nunjucks')
+const { relative, resolve } = require('path')
 const sinon = require('sinon')
 
-test('mail decorator exists', t => {
-  t.plan(2)
+const testContext = { name: 'Test Name' }
+const testRecipients = ['test@example.com']
+const testSender = 'sender@example.com'
+const testSubject = `${testContext.name}, Test Subject`
+const testHtml =
+  '<!DOCTYPE html>\n' +
+  '<html lang="en">\n' +
+  '  <head></head>\n' +
+  '  <body>\n' +
+  '    <p>Name: test-context</p>\n' +
+  '  </body>\n' +
+  '</html>\n'
+
+const testMessage = {
+  to: testRecipients,
+  from: testSender,
+  subject: testSubject,
+  html: testHtml
+}
+
+test('mail, nodemailer & view decorators exist', async t => {
+  t.teardown(async () => fastify.close())
   const fastify = Fastify()
+  fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter: { jsonTransport: true } })
+  await fastify.ready()
+  t.ok(fastify.hasDecorator('mail'))
+  t.ok(fastify.hasDecorator('nodemailer'))
+  t.ok(fastify.hasDecorator('view'))
+})
 
-  fastify.register(nodemailer)
-  fastify.register(pointOfView, { engine: { ejs } })
-  fastify.register(fastifyMail)
+test('view decorator does not exist if the engine is not provided', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
+  t.notOk(fastify.hasDecorator('view'))
+})
 
-  fastify.ready(err => {
-    t.error(err)
-    t.ok(fastify.hasDecorator('mail'))
+test('throws an error if point-of-view is not registered', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
+  await t.rejects(fastify.ready(), Error('fastify-mail requires a view decorator.'))
+  t.notOk(fastify.hasDecorator('view'))
+})
 
+test('throws an error if an invalid transporter is given', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter: 'error' })
+  await t.rejects(fastify.ready(), Error('Cannot create property \'mailer\' on string \'error\''))
+})
+
+test('fastify-mail uses templates to send mail when point-of-view is registered separately', async (t) => {
+  t.teardown(() => {
     fastify.close()
+    sendMailStub.restore()
   })
-})
-
-test('fastify-mail throws error if plugin dependencies not registered:', t => {
-  t.test('point-of-view', t => {
-    t.plan(2)
-    const fastify = Fastify()
-
-    fastify.register(nodemailer)
-    fastify.register(fastifyMail)
-
-    fastify.ready(err => {
-      t.ok(err instanceof Error)
-      t.is(err.message, "The dependency 'point-of-view' of plugin 'fastify-mail' is not registered")
-    })
-  })
-
-  t.test('fastify-nodemailer', t => {
-    t.plan(2)
-    const fastify = Fastify()
-
-    fastify.register(pointOfView, { engine: { ejs } })
-    fastify.register(fastifyMail)
-
-    fastify.ready(err => {
-      t.ok(err instanceof Error)
-      t.is(err.message, "The dependency 'fastify-nodemailer' of plugin 'fastify-mail' is not registered")
-    })
-  })
-  t.end()
-})
-
-test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', t => {
-  t.plan(2)
-  const fastify = Fastify()
-
-  const testContext = { name: 'Test Name' }
-
-  const testRecipients = ['test@example.com']
-  const testSender = 'sender@example.com'
-  const testSubject = `${testContext.name}, Test Subject`
-  const testHtml =
-    '<!DOCTYPE html>\n' +
-    '<html lang="en">\n' +
-    '  <head></head>\n' +
-    '  <body>\n' +
-    '    <p>Name: test-context</p>\n' +
-    '  </body>\n' +
-    '</html>\n'
-
-  const testMessage = {
-    to: testRecipients,
-    from: testSender,
-    subject: testSubject,
-    html: testHtml
-  }
 
   const testTemplates = t.testdir({
-    'html.ejs': t.fixture('file', testHtml),
-    'subject.ejs': t.fixture('file', testSubject),
-    'from.ejs': t.fixture('file', testSender)
+    'html.njk': t.fixture('file', testHtml),
+    'subject.njk': t.fixture('file', testSubject),
+    'from.njk': t.fixture('file', testSender)
   })
 
-  fastify.register(nodemailer)
-  fastify.register(pointOfView, {
-    engine: {
-      ejs
-    },
-    includeViewExtension: true
+  const povConfig = {
+    propertyName: 'foo',
+    engine: { nunjucks },
+    includeViewExtension: true,
+    options: { filename: resolve('templates') }
+  }
+
+  const fastify = Fastify()
+  fastify.register(require('point-of-view'), povConfig)
+  fastify.after(() => {
+    fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
-  fastify.register(fastifyMail)
+  await fastify.ready()
 
-  fastify.ready(async err => {
-    t.error(err)
-    fastify.nodemailer.sendMail = sinon.stub()
-    await fastify.mail.sendMail(testRecipients, relative(__dirname, testTemplates), testContext)
-    t.error(sinon.assert.calledOnceWithExactly(fastify.nodemailer.sendMail, testMessage))
+  const sendMailStub = sinon.stub(fastify.nodemailer, 'sendMail')
 
+  await fastify.mail.sendMail(testRecipients, relative(__dirname, testTemplates), testContext)
+
+  t.ok(fastify.hasDecorator('foo'))
+  t.same(sendMailStub.args[0], [testMessage])
+  t.is(sendMailStub.args.length, 1)
+})
+
+test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', async t => {
+  t.teardown(() => {
     fastify.close()
+    sendMailStub.restore()
   })
+
+  const testTemplates = t.testdir({
+    'html.njk': t.fixture('file', testHtml),
+    'subject.njk': t.fixture('file', testSubject),
+    'from.njk': t.fixture('file', testSender)
+  })
+
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter: { jsonTransport: true } })
+  await fastify.ready()
+
+  const sendMailStub = sinon.stub(fastify.nodemailer, 'sendMail')
+
+  await fastify.mail.sendMail(testRecipients, relative(__dirname, testTemplates), testContext)
+
+  t.same(sendMailStub.args[0], [testMessage])
+  t.is(sendMailStub.args.length, 1)
+})
+
+test('fastify.mail.sendMail returns an error with missing arguments', async (t) => {
+  t.teardown(() => fastify.close())
+  const fastify = Fastify()
+  fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter: { jsonTransport: true } })
+  await fastify.ready()
+  const { error } = await fastify.mail.sendMail()
+  t.ok(error instanceof TypeError)
+  t.is(error.message, 'The "path" argument must be of type string. Received undefined')
 })

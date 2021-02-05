@@ -58,6 +58,7 @@ profile*
 *flamegraph*
 
 # environment
+.env
 .envrc
 
 # package-lock

@@ -1,6 +1,6 @@
 {
-  "name": "fastify-mailgun-example",
-  "description": "An example to configure fastify-mail with MailGun for rendering and sending emails.",
+  "name": "maildev-example",
+  "description": "An example to configure fastify-mail with MailDev for rendering and sending emails during development",
   "main": "index.js",
   "scripts": {
     "start": "fastify start index.js -l info -w"
@@ -8,7 +8,6 @@
   "dependencies": {
     "fastify": "^3.0.0",
     "fastify-cli": "^2.5.1",
-    "nodemailer-mailgun-transport": "^2.0.2",
     "nunjucks": "^3.2.2"
   }
 }

@@ -8,33 +8,47 @@ A [Fastify](https://www.fastify.io/) plugin that uses [point-of-view](https://gi
 npm i @autotelic/fastify-mail
 ```
 
+### Setup
+
+`fastify-mail` decorates the reply interface with the `mail` method and takes two options to get started: `pov` and `transporter`
+
+##### Point-of-View
+- `pov.engine` should be a template engine object used to configure point-of-view
+- to see a list of engines currently supported by point-of-view with options, [view docs here](https://github.com/fastify/point-of-view/blob/master/index.d.ts)
+- For quick start, `fastify-mail` only requires the engine. For example, using `nunjucks`:
+
+  ```js
+  fastify.register(mail, { pov: { engine: { nunjucks: require('nunjucks') } }, transporter: ... })
+  ```
+
+- If you'd prefer to register `point-of-view` on your own, omit the `engine` option and `fastify-mail` will not register it.
+- If you configure `point-of-view` with a different decorator name, add this to the options of `fastify-mail`
+  ```js
+  fastify.register(mail, { pov: { propertyName: 'POV_DECORATOR' }, transporter: ... })
+  ```
+
+##### Nodemailer
+- `transporter` should be an object defining connection data to be used as a `nodemailer` SMTP transport. [View nodemailer's docs here](https://nodemailer.com/smtp/)
+- `fastify-mail` decorates `fastify` with `nodemailer` so a transporter must be defined
+- For example, using `maildev`:
+  ```js
+  const transporter = {
+    host: 'localhost',
+    port: 1025,
+    ignoreTLS: true
+  }
+
+  fastify.register(mail, { pov: { engine: ... }, transporter })
+  ```
+
 ### Example
 
 ```js
 // index.js
 const mail = require("@autotelic/fastify-mail")
-const nodemailer = require("fastify-nodemailer")
-const pointOfView = require("point-of-view")
-
-// register plugin dependencies: fastify-nodemailer & point-of-view
-
-// point-of-view config must include a template engine and includeViewExtension: true
-const povConfig = {
-  engine: {
-    // template engine
-  },
-  includeViewExtension: true
-}
-
-const transporterConfig = {
-  // transporter config
-}
-
-fastify.register(nodemailer, transporterConfig)
-fastify.register(pointOfView, povConfig)
 
 // register fastify-mail
-fastify.register(mail)
+fastify.register(mail, pov: { {engine: { TEMPLATE_ENGINE_OBJECT } }, transporter: { NODEMAILER_TRANSPORTER_OBJECT } })
 
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
@@ -63,15 +77,15 @@ Each message must have the following templates with the file extension set in po
 |--index.js
 |--templates
    |-- email
-      |-- html.ejs
-      |-- subject.ejs
-      |-- from.ejs
+      |-- html.njk
+      |-- subject.njk
+      |-- from.njk
 ```
 
 #### Example Apps
 See [/examples/mailgun](./examples/mailgun) for a working example app using [nodemailer-mailgun-transport](https://github.com/xr0master/mailgun-nodemailer-transport#readme).
 
-See [/examples/mailslurper](./examples/mailslurper) for a working example app using [MailSlurper](https://mailslurper.com/)
+See [/examples/maildev](./examples/maildev) for a working example app using [MailDev](https://maildev.github.io/maildev/)
 
 ### API
 
