@@ -95,20 +95,32 @@ This plugin decorates fastify with a `mail` object containing the following meth
 
 - `createMessage`: `function` - Generates a message from templates with context injected. 
   - Accepts the following arguments: 
-    - `recipients`: `array` - Array containing recipient[s] email address (`string`).
+    - `recipients`: `array` -  Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
     - `templates`: `string` - the relative path to the message's templates.
     - `context`: `object` - Object containing context for the message.
+    - `opts`: `object` - Object containing options:
+
   - Returns: `object` with following properties:
-    - `to`: `array` - Array containing recipient[s] email address (`string`).
     - `from`: `string` - The email address the email is to be sent from.
-    - `html`: `string` - The HTML of the email with context injected.
+    - `to`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
+    - `cc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
+    - `bcc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Bcc: field
+    - `replyTo` : `string` - An email address that will appear on the Reply-To: field
     - `subject`: `string` - The subject of the email with context injected.
+    - `html`: `string` - The HTML version of the message as an Unicode string, with context injected.
+    - `text` : `string` - The plaintext version of the message as an Unicode string, with context injected
 
 - `sendMail`: `function` - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
   - Accepts the following arguments: 
-    - `recipients`: `array` - Array containing recipient[s] email address (`string`).
+    - `recipients`: `array` -Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
     - `templates`: `string` - The relative path to the message's templates.
     - `context`: `object` - Object containing context for the message.
+    - `opts`: `object` - Object containing options:
+      -  `from`: `string` - When provided this is used in preference to a template
+      -  `from`: `string` - When provided this is used in preference to a template
+      -  `replyTo`: `string` - When used this is used in preference to a template
+      -  `cc`: `string` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
+      -  `bcc`: `string` - Comma separated list or an array of recipients email addresses that will appear on the Bcc: field
 
 ### Testing
 

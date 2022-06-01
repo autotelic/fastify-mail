@@ -17,12 +17,17 @@ const testHtml =
   '    <p>Name: test-context</p>\n' +
   '  </body>\n' +
   '</html>\n'
+const testText = ''
 
 const testMessage = {
   to: testRecipients,
   from: testSender,
   subject: testSubject,
-  html: testHtml
+  html: testHtml,
+  replyTo: undefined,
+  text: testText,
+  cc: '',
+  bcc: ''
 }
 
 test('mail, nodemailer & view decorators exist', async t => {
@@ -66,7 +71,8 @@ test('fastify-mail uses templates to send mail when point-of-view is registered 
   const testTemplates = t.testdir({
     'html.njk': t.fixture('file', testHtml),
     'subject.njk': t.fixture('file', testSubject),
-    'from.njk': t.fixture('file', testSender)
+    'from.njk': t.fixture('file', testSender),
+    'text.njk': t.fixture('file', testText)
   })
 
   const povConfig = {
@@ -101,7 +107,8 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', a
   const testTemplates = t.testdir({
     'html.njk': t.fixture('file', testHtml),
     'subject.njk': t.fixture('file', testSubject),
-    'from.njk': t.fixture('file', testSender)
+    'from.njk': t.fixture('file', testSender),
+    'text.njk': t.fixture('file', testText)
   })
 
   const fastify = Fastify()
