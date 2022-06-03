@@ -14,6 +14,7 @@
 - Run a new docker container to get mailDev running:
 
   ```sh
+  docker pull maildev/maildev
   docker run -p 1080:80 -p 1025:25 --name maildev maildev/maildev
   ```
 
