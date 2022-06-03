@@ -99,8 +99,6 @@ This plugin decorates fastify with a `mail` object containing the following meth
 - `createMessage`: `function` - Generates a message from templates with context injected. 
   - Accepts the following arguments: 
     - `message`: `array` -  Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
-    - `templatePath`: `string` - the relative path to the message's templates.
-    - `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
         - `from`: `string` - The email address the email is to be sent from.
         - `to`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
         - `cc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
@@ -109,6 +107,8 @@ This plugin decorates fastify with a `mail` object containing the following meth
         - `subject`: `string` - The subject of the email with context injected.
         - `html`: `string` - The HTML version of the message as an Unicode string, with context injected.
         - `text` : `string` - The plaintext version of the message as an Unicode string, with context injected
+    - `templatePath`: `string` - the relative path to the message's templates.
+    - `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
 
   - Returns: `object` with following properties:
     - `accepted` : array of email addresses accepted - eg. [ 'test@example.com' ]
