@@ -32,51 +32,72 @@ const fastifyMail = async (fastify, opts) => {
 
   // mail decorator configurations:
   const mail = {
-    createMessage: async function (recipients, templates, context, opts = {}) {
+    // createMessage: async function (recipients, templates, context, opts = {}) {
+    createMessage: async function (message, templatePath, context) {
       // renders a template with the given context based on the templateName which
       // should be found in the path provided by templates. Returns "" if the promise is rejected.
       const renderTemplate = async (templateName) => {
-        return await fastify[propertyName](join(templates, templateName), context)
-          .catch(() => { return '' })
+        return await fastify[propertyName](join(templatePath, templateName), context)
+          .catch(() => { return null })
       }
 
+      // if opts.templatePath is a string, render the template
+
       // if from or subject is provided in opts these will be used in preference to templates
-      const from = opts.from
-      const subject = opts.subject
-      const replyTo = opts.replyTo
-      const cc = opts.cc
-      const bcc = opts.bcc
+      const from = message.from
+      const to = message.to
+      const subject = message.subject
+      const replyTo = message.replyTo
+      const cc = message.cc
+      const bcc = message.bcc
+      const html = message.html
+      const text = message.text
 
       const [
-        renderedFrom,
-        renderedSubject,
         renderedHtml,
         renderedText
       ] = await Promise.all([
-        await renderTemplate('from'),
-        await renderTemplate('subject'),
         await renderTemplate('html'),
         await renderTemplate('text')
       ])
 
       return {
-        from: from || renderedFrom,
-        to: recipients,
-        cc: cc || '',
-        bcc: bcc || '',
+        from,
+        to,
+        cc: cc,
+        bcc: bcc,
         replyTo,
-        subject: subject || renderedSubject,
-        html: renderedHtml,
-        text: renderedText || ''
+        subject: subject,
+        html: renderedHtml || html,
+        text: renderedText || text
       }
+    },
+    validateMessage: function (message) {
+      let errors = []
+      errors.pop('test')
+      if (message) {
+        if (!message.to) { errors.push('"to" must be defined') }
+        if (!message.from) { errors.push('"from" must be defined') }
+        if (!message.subject) { errors.push('"subject" must be defined') }
+      } else {
+        errors = ['message is not defined']
+      }
+
+      return errors
     },
 
     // the method that external users will call to send emails
-    // it takes a recipients list or array, templates directory, a context, and an options object
-    sendMail: async function (recipients, templates, context, opts = {}) {
+    // it either sends the messsage straight to nodemailer or uses createMessage to render templates if opts.templatePath is a provided
+    sendMail: async function (message, opts = {}) {
       try {
-        const message = await this.createMessage(recipients, templates, context, opts)
-        const queued = await fastify.nodemailer.sendMail(message)
+        const errors = this.validateMessage(message)
+        if (errors.length) {
+          throw new TypeError(errors.join('\n'))
+        }
+        const { templatePath, context } = opts
+        const queued = templatePath
+          ? fastify.nodemailer.sendMail(await this.createMessage(message, templatePath, context))
+          : fastify.nodemailer.sendMail(message)
         return queued
       } catch (error) {
         return { error }
