@@ -96,9 +96,9 @@ See [/examples/maildev](./examples/maildev) for a working example app using [Mai
 
 This plugin decorates fastify with a `mail` object containing the following methods:
 
-- `createMessage`: `function` - Generates a message from templates with context injected. 
+- `sendMail`: `function` - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
   - Accepts the following arguments: 
-    - `message`: `array` -  Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
+    - `message`: `object`
         - `from`: `string` - The email address the email is to be sent from.
         - `to`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
         - `cc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
@@ -108,7 +108,9 @@ This plugin decorates fastify with a `mail` object containing the following meth
         - `html`: `string` - The HTML version of the message as an Unicode string, with context injected.
         - `text` : `string` - The plaintext version of the message as an Unicode string, with context injected
     - `templatePath`: `string` - the relative path to the message's templates.
-    - `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
+    - `opts`: `object` - Object containing options:
+      -  `templatePath`:  `string` - the relative path to the message's templates.
+      -  `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
 
   - Returns: `object` with following properties:
     - `accepted` : array of email addresses accepted - eg. [ 'test@example.com' ]
@@ -120,20 +122,18 @@ This plugin decorates fastify with a `mail` object containing the following meth
     - `envelope` 
     - `messageId`
 
+- `createMessage`: `function` - Generates a message object where the data provided is updated to use templates where available with context variables injected
+  - Accepts the following arguments: 
+    - `message`: `object`
+      - fields as above
+    - `templatePath`: `string` - the relative path to the message's templates.
+    - `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
+
     For more details on this response see the Nodemail documentation [View nodemailer's docs here](https://nodemailer.com/smtp/)
 
 
-- `sendMail`: `function` - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
-  - Accepts the following arguments: 
-    - `recipients`: `array` -Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
-    - `templates`: `string` - The relative path to the message's templates.
-    - `context`: `object` - Object containing context for the message.
-    - `opts`: `object` - Object containing options:
-      -  `from`: `string` - When provided this is used in preference to a template
-      -  `from`: `string` - When provided this is used in preference to a template
-      -  `replyTo`: `string` - When used this is used in preference to a template
-      -  `cc`: `string` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
-      -  `bcc`: `string` - Comma separated list or an array of recipients email addresses that will appear on the Bcc: field
+
+
 
 ### Testing
 
