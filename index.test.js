@@ -12,18 +12,18 @@ const testHtmlTemplate =
   '<html lang="en">\n' +
   '  <head></head>\n' +
   '  <body>\n' +
-  `    <p>Name: ${testContext.name}</p>\n` +
+  '    <p>Name: {{ name }}</p>\n' +
   '  </body>\n' +
   '</html>\n'
 
-const testTextTemplate = `This is a test text message to ${testContext.name}`
+const testTextTemplate = 'This is a test text message to {{ name }}'
 
 const testHtml =
   '<!DOCTYPE html>\n' +
   '<html lang="en">\n' +
   '  <head></head>\n' +
   '  <body>\n' +
-  '    <p>No template used. This is a text html email</p>\n' +
+  '    <p>Name: Test Name</p>\n' +
   '  </body>\n' +
   '</html>\n'
 
@@ -43,7 +43,7 @@ const responseWhenTemplatesPresent = {
   from: 'from@ignoreme.com',
   replyTo: 'reply@ignoreme.com',
   subject: 'This is a plain text subject',
-  html: testHtmlTemplate,
+  html: testHtml,
   text: 'This is a test text message to Test Name',
   cc: 'cc@ignoreme.com',
   bcc: 'bcc@ignoreme.com'
