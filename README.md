@@ -53,6 +53,14 @@ fastify.register(mail, pov: { {engine: { TEMPLATE_ENGINE_OBJECT } }, transporter
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
 
+  const message = {
+    to: "to@a-person.com",
+    from: "from@person.com",
+    cc: "cc@person.com",
+    bcc: "bcc@person.com",
+    subject: "This is a subject"
+  }
+
   const opts = {
     templatePath: "path/to/my/templates/",
     context: { name: "Test Name" }

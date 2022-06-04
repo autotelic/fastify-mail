@@ -37,30 +37,25 @@ const fastifyMail = async (fastify, opts) => {
     sendMail: async function (message, opts = {}) {
       try {
         const errors = this.validateMessage(message)
+
         if (errors.length) {
           throw new TypeError(errors.join('\n'))
         }
+
         const { templatePath, context } = opts
+
         const queued = templatePath
           ? fastify.nodemailer.sendMail(await this.createMessage(message, templatePath, context))
           : fastify.nodemailer.sendMail(message)
+
         return queued
       } catch (error) {
         return { error }
       }
     },
-    // createMessage: async function (recipients, templates, context, opts = {}) {
+    // Creates the message object that will be sent to nodemailer.
+    // It will either render the templates or use the data in the message object as is
     createMessage: async function (message, templatePath, context) {
-      // renders a template with the given context based on the templateName which
-      // should be found in the path provided by templates. Returns "" if the promise is rejected.
-      const renderTemplate = async (templateName) => {
-        return await fastify[propertyName](join(templatePath, templateName), context)
-          .catch(() => { return null })
-      }
-
-      // if opts.templatePath is a string, render the template
-
-      // if from or subject is provided in opts these will be used in preference to templates
       const from = message.from
       const to = message.to
       const subject = message.subject
@@ -81,14 +76,22 @@ const fastifyMail = async (fastify, opts) => {
       return {
         from,
         to,
-        cc: cc,
-        bcc: bcc,
+        cc,
+        bcc,
         replyTo,
-        subject: subject,
+        subject,
         html: renderedHtml || html,
         text: renderedText || text
       }
+
+      // renders a template with the given context based on the templateName which
+      // should be found in the path provided by templates. Returns "" if the promise is rejected.
+      async function renderTemplate (templateName) {
+        return await fastify[propertyName](join(templatePath, templateName), context)
+          .catch(() => { return null })
+      }
     },
+    // validates the message object includes to, from, subject and returns an error message if it does not
     validateMessage: function (message) {
       let errors = []
 
@@ -111,6 +114,7 @@ const fastifyMail = async (fastify, opts) => {
       return errors
     }
   }
+
   fastify.decorate('mail', mail)
 }
 
