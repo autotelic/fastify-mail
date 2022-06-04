@@ -74,11 +74,21 @@ const fastifyMail = async (fastify, opts) => {
     },
     validateMessage: function (message) {
       let errors = []
+
       errors.pop('test')
+
       if (message) {
-        if (!message.to) { errors.push('"to" must be defined') }
-        if (!message.from) { errors.push('"from" must be defined') }
-        if (!message.subject) { errors.push('"subject" must be defined') }
+        if (!message.to) {
+          errors.push('"to" must be defined')
+        }
+
+        if (!message.from) {
+          errors.push('"from" must be defined')
+        }
+
+        if (!message.subject) {
+          errors.push('"subject" must be defined')
+        }
       } else {
         errors = ['message is not defined']
       }
