@@ -52,15 +52,14 @@ fastify.register(mail, pov: { {engine: { TEMPLATE_ENGINE_OBJECT } }, transporter
 
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
-  const templatePath = "path/to/my/templates/"
-  const context = { name: "Test Name" }
 
   const opts = {
-    templatePath,
-    context
+    templatePath: "path/to/my/templates/",
+    context: { name: "Test Name" }
   }
 
   const queued = await fastify.mail.sendMail(message, opts)
+
   if (queued.error) {
     const { error } = queued
     reply.send(error);
@@ -80,9 +79,8 @@ Each message must have the following templates with the file extension set in po
 .
 |--index.js
 |--templates
-   |-- email
-      |-- html.njk
-      |-- text.njk
+    |-- html.njk
+    |-- text.njk
 ```
 
 #### Example Apps
@@ -96,38 +94,38 @@ See [/examples/maildev](./examples/maildev) for a working example app using [Mai
 
 This plugin decorates fastify with a `mail` object containing the following methods:
 
-- `sendMail`: `function` - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
+-  sendMail: 'function' - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
   - Accepts the following arguments: 
-    - `message`: `object`
-        - `from`: `string` - The email address the email is to be sent from.
-        - `to`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
-        - `cc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
-        - `bcc`: `array` - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Bcc: field
-        - `replyTo` : `string` - An email address that will appear on the Reply-To: field
-        - `subject`: `string` - The subject of the email with context injected.
-        - `html`: `string` - The HTML version of the message as an Unicode string, with context injected.
-        - `text` : `string` - The plaintext version of the message as an Unicode string, with context injected
-    - `templatePath`: `string` - the relative path to the message's templates.
-    - `opts`: `object` - Object containing options:
-      -  `templatePath`:  `string` - the relative path to the message's templates.
-      -  `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
+    - message: 'object'
+        - from: 'string' - The email address the email is to be sent from.
+        - to: 'array' - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
+        - cc: 'array' - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
+        - bcc: 'array' - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Bcc: field
+        - replyTo : 'string' - An email address that will appear on the Reply-To: field
+        - subject: 'string' - The subject of the email with context injected.
+        - html: 'string' - The HTML version of the message as an Unicode string, with context injected.
+        - text : 'string' - The plaintext version of the message as an Unicode string, with context injected
+    - templatePath: 'string' - the relative path to the message's templates.
+  - opts: 'object' - Object containing options:
+      -  templatePath:  'string' - the relative path to the message's templates.
+      -  context: 'object' - Object containing context for the message (such as - variables that will be used in copy)
 
-  - Returns: `object` with following properties:
-    - `accepted` : array of email addresses accepted - eg. [ 'test@example.com' ]
-    - `rejected` : array of email addresses rejected - eg. [],
-    - `envelopeTime`
-    - `messageTime` 
-    - `messageSize` 
-    - `response` 
-    - `envelope` 
-    - `messageId`
+  - Returns: 'object' with following properties:
+    - accepted : 'array' of email addresses accepted - eg. [ 'test@example.com' ]
+    - rejected : 'array' of email addresses rejected - eg. [],
+    - envelopeTime
+    - messageTime 
+    - messageSize 
+    - response 
+    - envelope 
+    - messageId
 
-- `createMessage`: `function` - Generates a message object where the data provided is updated to use templates where available with context variables injected
+- createMessage: 'function' - Generates a message object where the data provided is updated to use templates where available with context variables injected
   - Accepts the following arguments: 
-    - `message`: `object`
+    - message: 'object'
       - fields as above
-    - `templatePath`: `string` - the relative path to the message's templates.
-    - `context`: `object` - Object containing context for the message (such as - variables that will be used in copy)
+    - templatePath: 'string' - the relative path to the message's templates.
+    - context: 'object' - Object containing context for the message (such as - variables that will be used in copy)
 
     For more details on this response see the Nodemail documentation [View nodemailer's docs here](https://nodemailer.com/smtp/)
 
