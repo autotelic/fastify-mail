@@ -32,6 +32,23 @@ const fastifyMail = async (fastify, opts) => {
 
   // mail decorator configurations:
   const mail = {
+    // the method that external users will call to send emails
+    // it either sends the messsage straight to nodemailer or uses createMessage to render templates if opts.templatePath is a provided
+    sendMail: async function (message, opts = {}) {
+      try {
+        const errors = this.validateMessage(message)
+        if (errors.length) {
+          throw new TypeError(errors.join('\n'))
+        }
+        const { templatePath, context } = opts
+        const queued = templatePath
+          ? fastify.nodemailer.sendMail(await this.createMessage(message, templatePath, context))
+          : fastify.nodemailer.sendMail(message)
+        return queued
+      } catch (error) {
+        return { error }
+      }
+    },
     // createMessage: async function (recipients, templates, context, opts = {}) {
     createMessage: async function (message, templatePath, context) {
       // renders a template with the given context based on the templateName which
@@ -75,8 +92,6 @@ const fastifyMail = async (fastify, opts) => {
     validateMessage: function (message) {
       let errors = []
 
-      errors.pop('test')
-
       if (message) {
         if (!message.to) {
           errors.push('"to" must be defined')
@@ -94,24 +109,6 @@ const fastifyMail = async (fastify, opts) => {
       }
 
       return errors
-    },
-
-    // the method that external users will call to send emails
-    // it either sends the messsage straight to nodemailer or uses createMessage to render templates if opts.templatePath is a provided
-    sendMail: async function (message, opts = {}) {
-      try {
-        const errors = this.validateMessage(message)
-        if (errors.length) {
-          throw new TypeError(errors.join('\n'))
-        }
-        const { templatePath, context } = opts
-        const queued = templatePath
-          ? fastify.nodemailer.sendMail(await this.createMessage(message, templatePath, context))
-          : fastify.nodemailer.sendMail(message)
-        return queued
-      } catch (error) {
-        return { error }
-      }
     }
   }
   fastify.decorate('mail', mail)

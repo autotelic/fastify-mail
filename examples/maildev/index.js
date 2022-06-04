@@ -12,17 +12,16 @@ module.exports = async function (fastify, options) {
   fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter })
 
   fastify.get('/sendmail', async (req, reply) => {
-    const { name } = req.query
-    const templatePath = './templates'
-    const context = { name: name || 'Test Name', sender: 'sender@example.com' }
-
     const message = {
       to: ['test@example.com'],
       from: 'someone@example.com',
       subject: 'Test Subject'
     }
 
-    const opts = { templatePath, context }
+    const opts = {
+      templatePath: './templates',
+      context: { name: 'Test Name', sender: 'sender@example.com' }
+    }
 
     const queued = await fastify.mail.sendMail(message, opts)
     if (queued.error) {
