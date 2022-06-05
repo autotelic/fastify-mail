@@ -53,6 +53,14 @@ fastify.register(mail, pov: { {engine: { TEMPLATE_ENGINE_OBJECT } }, transporter
 // setup test route
 fastify.get("/sendmail", async (req, reply) => {
 
+  const message = {
+    to: "to@a-person.com",
+    from: "from@person.com",
+    cc: "cc@person.com",
+    bcc: "bcc@person.com",
+    subject: "This is a subject"
+  }
+
   const opts = {
     templatePath: "path/to/my/templates/",
     context: { name: "Test Name" }
@@ -72,8 +80,8 @@ fastify.get("/sendmail", async (req, reply) => {
 
 #### Templates
 Each message must have the following templates with the file extension set in point-of-view config:
-  - `html`: Contains the html template for the email.
-  - `text`: Contains the text template for the email.
+  - 'html': Contains the html template for the email.
+  - 'text': Contains the text template for the email.
 
 ```
 .
@@ -97,6 +105,7 @@ This plugin decorates fastify with a `mail` object containing the following meth
 -  sendMail: 'function' - Calls `createMessage` to generate an message and uses [fastify-nodemailer](https://github.com/lependu/fastify-nodemailer) to send the generated email. 
   - Accepts the following arguments: 
     - message: 'object'
+            *This is a valid 'message' object as per the Nodemailer API*
         - from: 'string' - The email address the email is to be sent from.
         - to: 'array' - Comma separated list or an array of recipients email addresses (`string`) that will appear on the To: field
         - cc: 'array' - Comma separated list or an array of recipients email addresses (`string`) that will appear on the Cc: field
@@ -105,10 +114,10 @@ This plugin decorates fastify with a `mail` object containing the following meth
         - subject: 'string' - The subject of the email with context injected.
         - html: 'string' - The HTML version of the message as an Unicode string, with context injected.
         - text : 'string' - The plaintext version of the message as an Unicode string, with context injected
-    - templatePath: 'string' - the relative path to the message's templates.
-  - opts: 'object' - Object containing options:
-      -  templatePath:  'string' - the relative path to the message's templates.
-      -  context: 'object' - Object containing context for the message (such as - variables that will be used in copy)
+
+    - opts: 'object' - Object containing options:
+        -  templatePath:  'string' - the relative path to the message's templates.
+        -  context: 'object' - Object containing context for the message (such as - variables that will be used in copy)
 
   - Returns: 'object' with following properties:
     - accepted : 'array' of email addresses accepted - eg. [ 'test@example.com' ]
@@ -128,10 +137,6 @@ This plugin decorates fastify with a `mail` object containing the following meth
     - context: 'object' - Object containing context for the message (such as - variables that will be used in copy)
 
     For more details on this response see the Nodemail documentation [View nodemailer's docs here](https://nodemailer.com/smtp/)
-
-
-
-
 
 ### Testing
 

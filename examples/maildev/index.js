@@ -24,6 +24,7 @@ module.exports = async function (fastify, options) {
     }
 
     const queued = await fastify.mail.sendMail(message, opts)
+
     if (queued.error) {
       const { error } = queued
       reply.send(error)
@@ -52,6 +53,7 @@ module.exports = async function (fastify, options) {
     }
 
     const queued = await fastify.mail.sendMail(message)
+
     if (queued.error) {
       const { error } = queued
       reply.send(error)
