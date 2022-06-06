@@ -26,7 +26,6 @@
 
 - Open a browser to `localhost:1080` to view test inbox.
 - Send a GET request to `localhost:3000/sendmail` and watch it appear at `localhost:1080`.
-- Send a GET request to `localhost:3000/sendmail?name=Kermit` for param appear in the email appear
 - Send a GET request to `localhost:3000/no-templates` for a version where no templates are provided
 
 
