@@ -1,19 +1,13 @@
 name: Validate & Release
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - main
+    # tags:
+    #   - v*
 jobs:
   validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '12.x'
-          registry-url: 'https://registry.npmjs.org/'
-      - run: npm install
-      - run: npm run validate
+    uses: ./.github/workflows/validate.yml
 
   publish-npm:
     runs-on: ubuntu-latest

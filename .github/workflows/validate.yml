@@ -1,6 +1,8 @@
+name: Run linter & Tests
 
-name: Validate
-on: push
+on:
+  [push, workflow_call]
+
 jobs:
   validate:
     runs-on: ubuntu-latest
