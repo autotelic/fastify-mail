@@ -1,6 +1,6 @@
 'use strict'
 const fastifyPlugin = require('fastify-plugin')
-const pointOfView = require('point-of-view')
+const pointOfView = require('@fastify/view')
 const { createTransport } = require('nodemailer')
 const { resolve, join } = require('path')
 

@@ -103,7 +103,7 @@ test('fastify-mail uses templates to send mail when point-of-view is registered 
   }
 
   const fastify = Fastify()
-  fastify.register(require('point-of-view'), povConfig)
+  fastify.register(require('@fastify/view'), povConfig)
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -132,7 +132,7 @@ test('fastify-mail uses string variables (for text and html) when a template is 
   }
 
   const fastify = Fastify()
-  fastify.register(require('point-of-view'), povConfig)
+  fastify.register(require('@fastify/view'), povConfig)
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -165,7 +165,7 @@ test('fastify-mail uses text template when available but defaults to provided ht
   }
 
   const fastify = Fastify()
-  fastify.register(require('point-of-view'), povConfig)
+  fastify.register(require('@fastify/view'), povConfig)
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -198,7 +198,7 @@ test('fastify-mail uses html template when available but defaults to provided te
   }
 
   const fastify = Fastify()
-  fastify.register(require('point-of-view'), povConfig)
+  fastify.register(require('@fastify/view'), povConfig)
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
