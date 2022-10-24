@@ -62,6 +62,7 @@ const fastifyMail = async (fastify, opts) => {
       const replyTo = message.replyTo
       const cc = message.cc
       const bcc = message.bcc
+      const attachments = message.attachments
       const html = message.html
       const text = message.text
 
@@ -78,6 +79,7 @@ const fastifyMail = async (fastify, opts) => {
         to,
         cc,
         bcc,
+        attachments,
         replyTo,
         subject,
         html: renderedHtml || html,
