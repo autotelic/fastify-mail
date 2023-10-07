@@ -35,7 +35,13 @@ const testMessage = {
   replyTo: 'reply@ignoreme.com',
   subject: 'This is a plain text subject',
   html: testHtml,
-  text: 'This is a plain text email message.'
+  text: 'This is a plain text email message.',
+  attachments: [
+    {
+      filename: 'text1.txt',
+      content: 'hello world!'
+    }
+  ]
 }
 
 const responseWhenTemplatesPresent = {
@@ -46,7 +52,13 @@ const responseWhenTemplatesPresent = {
   replyTo: 'reply@ignoreme.com',
   subject: 'This is a plain text subject',
   html: testHtml,
-  text: 'This is a test text message to Test Name'
+  text: 'This is a test text message to Test Name',
+  attachments: [
+    {
+      filename: 'text1.txt',
+      content: 'hello world!'
+    }
+  ]
 }
 
 test('mail, nodemailer & view decorators exist', async t => {
@@ -115,7 +127,7 @@ test('fastify-mail uses templates to send mail when point-of-view is registered 
 
   t.ok(fastify.hasDecorator('foo'))
   t.same(sendMailStub.args[0], [responseWhenTemplatesPresent])
-  t.is(sendMailStub.args.length, 1)
+  t.equal(sendMailStub.args.length, 1)
 })
 
 test('fastify-mail uses string variables (for text and html) when a template is not present', async (t) => {
@@ -144,7 +156,7 @@ test('fastify-mail uses string variables (for text and html) when a template is 
 
   t.ok(fastify.hasDecorator('foo'))
   t.same(sendMailStub.args[0], [testMessage])
-  t.is(sendMailStub.args.length, 1)
+  t.equal(sendMailStub.args.length, 1)
 })
 
 test('fastify-mail uses text template when available but defaults to provided html if no template is available', async (t) => {
@@ -177,7 +189,7 @@ test('fastify-mail uses text template when available but defaults to provided ht
 
   t.ok(fastify.hasDecorator('foo'))
   t.same(sendMailStub.args[0][0].html, testHtml)
-  t.is(sendMailStub.args.length, 1)
+  t.equal(sendMailStub.args.length, 1)
 })
 
 test('fastify-mail uses html template when available but defaults to provided text if no template is available', async (t) => {
@@ -211,7 +223,7 @@ test('fastify-mail uses html template when available but defaults to provided te
   t.ok(fastify.hasDecorator('foo'))
   t.same(sendMailStub.args[0][0].html, testHtml)
   t.same(sendMailStub.args[0][0].text, 'This is a plain text email message.')
-  t.is(sendMailStub.args.length, 1)
+  t.equal(sendMailStub.args.length, 1)
 })
 
 test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', async t => {
@@ -234,7 +246,7 @@ test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', a
   await fastify.mail.sendMail(testMessage, { templatePath: relative(__dirname, testTemplates), context: testContext })
 
   t.same(sendMailStub.args[0], [responseWhenTemplatesPresent])
-  t.is(sendMailStub.args.length, 1)
+  t.equal(sendMailStub.args.length, 1)
 })
 
 test('fastify.mail.sendMail returns an error when required values are not present (from)', async (t) => {
@@ -245,7 +257,7 @@ test('fastify.mail.sendMail returns an error when required values are not presen
   const { error } = await fastify.mail.sendMail({ to: 'to@ignoreme.com', subject: 'subject@ignoreme.com' })
 
   t.ok(error instanceof TypeError)
-  t.is(error.message, '"from" must be defined')
+  t.equal(error.message, '"from" must be defined')
 })
 
 test('fastify.mail.sendMail returns an error multiple required values are missing', async (t) => {
@@ -256,7 +268,7 @@ test('fastify.mail.sendMail returns an error multiple required values are missin
   const { error } = await fastify.mail.sendMail({ from: 'from@ignoreme.com' })
 
   t.ok(error instanceof TypeError)
-  t.is(error.message, '"to" must be defined\n"subject" must be defined')
+  t.equal(error.message, '"to" must be defined\n"subject" must be defined')
 })
 
 test('fastify.mail.sendMail returns an error when no message is defined', async (t) => {
@@ -267,5 +279,5 @@ test('fastify.mail.sendMail returns an error when no message is defined', async 
   const { error } = await fastify.mail.sendMail()
 
   t.ok(error instanceof TypeError)
-  t.is(error.message, 'message is not defined')
+  t.equal(error.message, 'message is not defined')
 })

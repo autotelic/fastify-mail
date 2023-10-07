@@ -13,6 +13,7 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+.tap
 
 # nyc test coverage
 .nyc_output
@@ -61,5 +62,7 @@ profile*
 .env
 .envrc
 
-# package-lock
+# lockfiles
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
