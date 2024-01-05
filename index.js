@@ -56,39 +56,51 @@ const fastifyMail = async (fastify, opts) => {
     // Creates the message object that will be sent to nodemailer.
     // It will either render the templates or use the data in the message object as is
     createMessage: async function (message, templatePath, context) {
-      const from = message.from
-      const to = message.to
-      const subject = message.subject
-      const replyTo = message.replyTo
-      const cc = message.cc
-      const bcc = message.bcc
-      const html = message.html
-      const text = message.text
-
-      const [
-        renderedHtml,
-        renderedText
-      ] = await Promise.all([
-        await renderTemplate('html'),
-        await renderTemplate('text')
-      ])
-
-      return {
-        from,
-        to,
-        cc,
-        bcc,
-        replyTo,
-        subject,
-        html: renderedHtml || html,
-        text: renderedText || text
+      const formattedMessage = {
+        from: message.from,
+        to: message.to,
+        subject: message.subject,
+        replyTo: message.replyTo,
+        cc: message.cc,
+        bcc: message.bcc,
+        html: message.html,
+        text: message.text
       }
 
-      // renders a template with the given context based on the templateName which
-      // should be found in the path provided by templates. Returns "" if the promise is rejected.
+      if (templatePath) {
+        const [
+          { template: renderedHtml, error: htmlError },
+          { template: renderedText, error: textError }
+        ] = await Promise.all([
+          await renderTemplate('html'),
+          await renderTemplate('text')
+        ])
+
+        if (!renderedHtml && !renderedText) {
+          fastify.log.error(`fastify-mail: ${htmlError}`)
+          fastify.log.error(`fastify-mail: ${textError}`)
+        }
+
+        if (renderedHtml) {
+          formattedMessage.html = renderedHtml
+        }
+
+        if (renderedText) {
+          formattedMessage.text = renderedText
+        }
+      }
+
+      return formattedMessage
+
+      // renders a template with the given context based on the templateName & templatePath,
+      // if it fails to render the template, it returns an error message instead.
       async function renderTemplate (templateName) {
-        return await fastify[propertyName](join(templatePath, templateName), context)
-          .catch(() => { return null })
+        try {
+          const template = await fastify[propertyName](join(templatePath, templateName), context)
+          return { template }
+        } catch (error) {
+          return { error: error.message }
+        }
       }
     },
     // validates the message object includes to, from, subject and returns an error message if it does not

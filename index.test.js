@@ -68,7 +68,7 @@ test('view decorator does not exist if the engine is not provided', async ({ tea
   notOk(fastify.hasDecorator('view'))
 })
 
-test('throws an error if point-of-view is not registered', async ({ teardown, notOk, rejects, ok, equal }) => {
+test('throws an error if point-of-view is not registered', async ({ teardown, notOk, rejects }) => {
   teardown(() => fastify.close())
   const fastify = Fastify()
   fastify.register(fastifyMail, { transporter: { jsonTransport: true } })
@@ -77,7 +77,7 @@ test('throws an error if point-of-view is not registered', async ({ teardown, no
   notOk(fastify.hasDecorator('view'))
 })
 
-test('throws an error if an invalid transporter is given', async ({ teardown, rejects, ok, equal }) => {
+test('throws an error if an invalid transporter is given', async ({ teardown, rejects }) => {
   teardown(() => fastify.close())
   const fastify = Fastify()
   fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter: 'error' })
@@ -133,6 +133,10 @@ test('fastify-mail uses string variables (for text and html) when a template is 
 
   const fastify = Fastify()
   fastify.register(require('@fastify/view'), povConfig)
+
+  const loggedErrors = []
+  fastify.log.error = (msg) => { loggedErrors.push(msg) }
+
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -144,6 +148,7 @@ test('fastify-mail uses string variables (for text and html) when a template is 
 
   ok(fastify.hasDecorator('foo'))
   same(sendMailStub.args[0], [testMessage])
+  equal(loggedErrors.length, 0)
   equal(sendMailStub.args.length, 1)
 })
 
@@ -166,6 +171,10 @@ test('fastify-mail uses text template when available but defaults to provided ht
 
   const fastify = Fastify()
   fastify.register(require('@fastify/view'), povConfig)
+
+  const loggedErrors = []
+  fastify.log.error = (msg) => { loggedErrors.push(msg) }
+
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -177,6 +186,7 @@ test('fastify-mail uses text template when available but defaults to provided ht
 
   ok(fastify.hasDecorator('foo'))
   same(sendMailStub.args[0][0].html, testHtml)
+  equal(loggedErrors.length, 0)
   equal(sendMailStub.args.length, 1)
 })
 
@@ -199,6 +209,10 @@ test('fastify-mail uses html template when available but defaults to provided te
 
   const fastify = Fastify()
   fastify.register(require('@fastify/view'), povConfig)
+
+  const loggedErrors = []
+  fastify.log.error = (msg) => { loggedErrors.push(msg) }
+
   fastify.after(() => {
     fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
   })
@@ -211,7 +225,42 @@ test('fastify-mail uses html template when available but defaults to provided te
   ok(fastify.hasDecorator('foo'))
   same(sendMailStub.args[0][0].html, testHtml)
   same(sendMailStub.args[0][0].text, 'This is a plain text email message.')
+  equal(loggedErrors.length, 0)
   equal(sendMailStub.args.length, 1)
+})
+
+test('fastify-mail will throw errors if templatePath is defined, but does not exist', async ({ teardown, testdir, equal }) => {
+  teardown(() => {
+    fastify.close()
+    sendMailStub.restore()
+  })
+
+  const testTemplates = testdir({})
+
+  const povConfig = {
+    propertyName: 'foo',
+    engine: { nunjucks },
+    includeViewExtension: true,
+    options: { filename: resolve('templates') }
+  }
+
+  const fastify = Fastify()
+  fastify.register(require('@fastify/view'), povConfig)
+
+  const loggedErrors = []
+  fastify.log.error = (msg) => { loggedErrors.push(msg) }
+
+  fastify.after(() => {
+    fastify.register(fastifyMail, { pov: { propertyName: 'foo' }, transporter: { jsonTransport: true } })
+  })
+  await fastify.ready()
+
+  const sendMailStub = sinon.stub(fastify.nodemailer, 'sendMail')
+
+  await fastify.mail.sendMail(testMessage, { templatePath: relative(__dirname, testTemplates), context: testContext })
+
+  equal(loggedErrors[0], 'fastify-mail: template not found: .tap/fixtures/.-index.test.js-fastify-mail-will-throw-errors-if-templatePath-is-defined-but-does-not-exist/html.njk')
+  equal(loggedErrors[1], 'fastify-mail: template not found: .tap/fixtures/.-index.test.js-fastify-mail-will-throw-errors-if-templatePath-is-defined-but-does-not-exist/text.njk')
 })
 
 test('fastify.mail.sendMail calls nodemailer.sendMail with correct arguments', async ({ teardown, testdir, fixture, same, equal }) => {

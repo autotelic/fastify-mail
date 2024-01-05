@@ -1,7 +1,15 @@
-declare module '@autotelic/fastify-mail' {
-  import { FastifyInstance, FastifyPluginCallback } from 'fastify';
-  import { Transporter } from 'nodemailer';
+import { FastifyPluginCallback } from 'fastify';
+import { Transporter } from 'nodemailer';
 
+type FastifyMail = FastifyPluginCallback<fastifyMail.FastifyMailOptions>;
+
+declare module 'fastify' {
+  interface FastifyInstance {
+    mail: fastifyMail.FastifyMailDecorator;
+  }
+}
+
+declare namespace fastifyMail {
   // Define the options for the plugin
   export interface FastifyMailOptions {
     pov?: {
@@ -13,7 +21,7 @@ declare module '@autotelic/fastify-mail' {
   }
 
   // Define the shape of the mail decorator
-  interface FastifyMailDecorator {
+  export interface FastifyMailDecorator {
     sendMail: (message: MailMessage, opts?: SendMailOptions) => Promise<any>;
     createMessage: (message: MailMessage, templatePath: string, context: any) => Promise<MailMessage>;
     validateMessage: (message: MailMessage) => string[];
@@ -46,5 +54,11 @@ declare module '@autotelic/fastify-mail' {
   // The exported plugin function
   const fastifyMail: FastifyPluginCallback<FastifyMailOptions>;
 
-  export default fastifyMail;
+  export { fastifyMail as default };
 }
+
+declare function fastifyMail(
+  ...params: Parameters<FastifyMail>
+): ReturnType<FastifyMail>;
+
+export = fastifyMail;
