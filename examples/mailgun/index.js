@@ -13,14 +13,19 @@ module.exports = async function (fastify, options) {
 
   const transporter = mg(mgConfig)
 
+  console.log(transporter)
+
   await fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter })
 
   fastify.get('/sendmail', async (req, reply) => {
-    const recipients = [process.env.RECIPIENTS]
-    const templates = './templates'
+    const templatePath = './templates'
     const context = { name: 'Test Name', sender: process.env.SENDER }
 
-    const queued = await fastify.mail.sendMail(recipients, templates, context)
+    const queued = await fastify.mail.sendMail({
+      to: process.env.RECIPIENT,
+      from: process.env.SENDER,
+      subject: 'fastify-mail test'
+    }, { templatePath, context })
     if (queued.error) {
       const { error } = queued
       reply.send(error)
