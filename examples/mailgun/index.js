@@ -13,8 +13,6 @@ module.exports = async function (fastify, options) {
 
   const transporter = mg(mgConfig)
 
-  console.log(transporter)
-
   await fastify.register(fastifyMail, { pov: { engine: { nunjucks } }, transporter })
 
   fastify.get('/sendmail', async (req, reply) => {
