@@ -57,14 +57,15 @@ const fastifyMail = async (fastify, opts) => {
     // It will either render the templates or use the data in the message object as is
     createMessage: async function (message, templatePath, context) {
       const formattedMessage = {
-        from: message.from,
         to: message.to,
-        subject: message.subject,
-        replyTo: message.replyTo,
         cc: message.cc,
         bcc: message.bcc,
+        from: message.from,
+        subject: message.subject,
+        replyTo: message.replyTo,
         html: message.html,
-        text: message.text
+        text: message.text,
+        attachments: message.attachments
       }
 
       if (templatePath) {

@@ -29,11 +29,11 @@ const testHtml =
 
 const testMessage = {
   to: 'to@ignoreme.com',
-  from: 'from@ignoreme.com',
   cc: 'cc@ignoreme.com',
   bcc: 'bcc@ignoreme.com',
-  replyTo: 'reply@ignoreme.com',
+  from: 'from@ignoreme.com',
   subject: 'This is a plain text subject',
+  replyTo: 'reply@ignoreme.com',
   html: testHtml,
   text: 'This is a plain text email message.',
   attachments: [
@@ -46,11 +46,11 @@ const testMessage = {
 
 const responseWhenTemplatesPresent = {
   to: 'to@ignoreme.com',
-  from: 'from@ignoreme.com',
   cc: 'cc@ignoreme.com',
   bcc: 'bcc@ignoreme.com',
-  replyTo: 'reply@ignoreme.com',
+  from: 'from@ignoreme.com',
   subject: 'This is a plain text subject',
+  replyTo: 'reply@ignoreme.com',
   html: testHtml,
   text: 'This is a test text message to Test Name',
   attachments: [
