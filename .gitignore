@@ -63,3 +63,6 @@ profile*
 
 # package-lock
 package-lock.json
+
+# node-tap
+.tap

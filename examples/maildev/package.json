@@ -6,8 +6,8 @@
     "start": "fastify start index.js -l info -w"
   },
   "dependencies": {
-    "fastify": "^3.0.0",
-    "fastify-cli": "^2.5.1",
-    "nunjucks": "^3.2.2"
+    "fastify": "^4.25.2",
+    "fastify-cli": "^6.0.0",
+    "nunjucks": "^3.2.4"
   }
 }

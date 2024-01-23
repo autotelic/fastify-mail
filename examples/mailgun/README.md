@@ -1,7 +1,5 @@
 # Fastify-Mail Plugin with mailgun Example
 
-### Setup:
-
 - Fork and clone [fastify-mail repo](https://github.com/autotelic/fastify-mail).
 - Install dependencies: `npm i`
 - change directory to `examples/mailgun` and install dependencies:
