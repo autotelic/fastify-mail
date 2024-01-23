@@ -45,7 +45,7 @@ module.exports = async function (fastify, options) {
       '</html>\n'
 
     const message = {
-      to: ['test@example.com'],
+      to: 'test@example.com',
       from: 'someone@example.com',
       subject: 'Test Subject',
       html: testHtml,

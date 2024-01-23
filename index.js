@@ -33,7 +33,7 @@ const fastifyMail = async (fastify, opts) => {
   // mail decorator configurations:
   const mail = {
     // the method that external users will call to send emails
-    // it either sends the messsage straight to nodemailer or uses createMessage to render templates if opts.templatePath is a provided
+    // it either sends the message straight to nodemailer or uses createMessage to render templates if opts.templatePath is a provided
     sendMail: async function (message, opts = {}) {
       try {
         const errors = this.validateMessage(message)
